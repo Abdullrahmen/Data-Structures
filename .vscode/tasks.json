@@ -7,8 +7,7 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${workspaceFolder}\\*.h",
-                "${workspaceFolder}\\*.cpp",
+                "${workspaceFolder}\\main.cpp",
                 "-o",
                 "${fileDirname}\\Vector.exe"
             ],
