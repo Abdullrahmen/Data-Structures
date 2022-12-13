@@ -18,7 +18,7 @@ _vec(new T[_capacity_size])
 {
     //std::cout<<"\n"<<"copy constructor called"<<"\n";
 
-    for (int i = 0; i < _size; i++)
+    for (uint i = 0; i < _size; i++)
         _vec[i] = vec._vec[i];
 }
 
@@ -61,12 +61,12 @@ _vec(nullptr)
     _size= ls.size();
 }
 
-template<typename T> void Vector<T>::expand_capacity(int expand_to)
+template<typename T> void Vector<T>::expand_capacity(uint expand_to)
 {
     if(expand_to== _capacity_size)
         return;
 
-    int temp_capacity{_capacity_size};
+    uint temp_capacity{_capacity_size};
 
     if (expand_to <= _initial_capacity_size)
         temp_capacity = _initial_capacity_size;    
@@ -79,7 +79,7 @@ template<typename T> void Vector<T>::expand_capacity(int expand_to)
             {
                 while(true)
                 {
-                    if(int(temp_capacity/_multiplication_factor) > expand_to && int(temp_capacity/_multiplication_factor) > _initial_capacity_size)
+                    if(uint(temp_capacity/_multiplication_factor) > expand_to && uint(temp_capacity/_multiplication_factor) > _initial_capacity_size)
                         temp_capacity /= _multiplication_factor;
                     else
                         break;
@@ -92,7 +92,7 @@ template<typename T> void Vector<T>::expand_capacity(int expand_to)
         case SUM:
         {
             /// @brief SUM equation: capacity - factor * floor( double(capacity/factor) - double(expand_to/factor) )
-            int f= floor(temp_capacity/double(_sum_factor)-expand_to/double(_sum_factor));
+            uint f= floor(temp_capacity/double(_sum_factor)-expand_to/double(_sum_factor));
             auto t= temp_capacity-(_sum_factor * f);
             if(t <= _initial_capacity_size)
                 temp_capacity= _initial_capacity_size;
@@ -154,12 +154,17 @@ template<typename T> void Vector<T>::expand_capacity(int expand_to)
     _capacity_size= temp_capacity;
 
     T* temp_vec= new T[_capacity_size];
-    for (int i = 0; i < _size; i++)
+    for (uint i = 0; i < _size; i++)
         temp_vec[i]= _vec[i];
 
     std::swap(temp_vec, _vec);
     if(temp_vec)
         delete[] temp_vec;
+}
+
+template<typename T> void Vector<T>::fill(uint n, T && value)
+{
+
 }
 
 template<typename T> void Vector<T>::push_back(T && value)
@@ -171,31 +176,39 @@ template<typename T> void Vector<T>::push_back(T && value)
     _vec[_size-1]= value;
 }
 
-template<typename T> void Vector<T>::print() const
+template<typename T> void Vector<T>::drop_back(bool rescale_capacity)
+{
+    --_size;
+
+    if(rescale_capacity)
+        expand_capacity();
+}
+
+template<typename T> void Vector<T>::debug_print() const
 {
     std::cout<<"\n"<<_capacity_size<<"\n"<<_size<<"\n";
-    for (int i = 0; i < _size; i++)
+    for (uint i = 0; i < _size; i++)
     {
         std::cout<<_vec[i];
         std::cout<<"    ";
     }
 }
 
-template<typename T> const int Vector<T>::get_size() const
+template<typename T> const uint Vector<T>::get_size() const
 {
     return _size;
 }
 
-template<typename T> const int Vector<T>::get_capacity_size() const
+template<typename T> const uint Vector<T>::get_capacity_size() const
 {
     return _capacity_size;
 }
 
-template<typename T> const int Vector<T>::get_initial_capacity_size() const
+template<typename T> const uint Vector<T>::get_initial_capacity_size() const
 {
     return _initial_capacity_size;
 }
-template<typename T> void Vector<T>::set_initial_capacity_size(int initial_capacity_size)
+template<typename T> void Vector<T>::set_initial_capacity_size(uint initial_capacity_size)
 {
     _initial_capacity_size= initial_capacity_size;
     expand_capacity(_size);
@@ -221,11 +234,11 @@ template<typename T> void Vector<T>::set_multiplication_factor(double factor)
     expand_capacity(_size);
 }
 
-template<typename T> const int Vector<T>::get_sum_factor() const
+template<typename T> const uint Vector<T>::get_sum_factor() const
 {
     return _sum_factor;
 }
-template<typename T> void Vector<T>::set_sum_factor(int factor)
+template<typename T> void Vector<T>::set_sum_factor(uint factor)
 {
     _sum_factor= factor;
     expand_capacity(_size);
