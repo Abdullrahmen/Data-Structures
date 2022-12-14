@@ -94,6 +94,7 @@ void test4()
     v.drop_back(50, false);
     assert(v.get_capacity_size() == 59);
 
-    v.debug_print();
+    std::cout<<"Test4 passed"<<"\n";
+    //v.debug_print();
 }
 
