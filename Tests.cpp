@@ -67,6 +67,33 @@ void test3()
     std::cout<<"Test3 passed"<<"\n";
 }
 
+/// @brief Test drop_back, push_back
 void test4()
-{}
+{
+    Vector<int> v{1};
+    v.set_sum_factor(3);
+    v.set_minimal_capacity_size(5);
+    v.set_capacity_method(SUM);
+
+    v.push_back({2,3,4,5,6});
+    assert(v.get_capacity_size() == 8);
+
+    v.push_back({7,8});
+    v.push_back(9);
+    assert(v.get_capacity_size() == 11);
+
+    v.push_back(50, -1);
+    assert(v.get_capacity_size() == 59);
+
+    v.drop_back(50, true);
+    assert(v.get_capacity_size() == 11);
+
+    v.push_back(50, -1);
+    assert(v.get_capacity_size() == 59);
+
+    v.drop_back(50, false);
+    assert(v.get_capacity_size() == 59);
+
+    v.debug_print();
+}
 

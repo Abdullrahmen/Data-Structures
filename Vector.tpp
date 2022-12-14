@@ -37,7 +37,7 @@ _vec(std::move(vec._vec))
     vec._vec= nullptr;
 }
 
-template<typename T> Vector<T>::Vector(std::initializer_list<T> ls):
+template<typename T> Vector<T>::Vector(std::initializer_list<T> lst):
 _minimal_capacity_size(DEFAULT_MINIMAL_CAPACITY_SIZE),
 _capacity_method(DEFAULT_CAPACITY_METHOD),
 _multiplication_factor(DEFAULT_MULTIPLICATION_FACTOR),
@@ -47,18 +47,12 @@ _size(0),
 _vec(nullptr)
 {
     //std::cout<<"\n"<<"initializer_list constructor called"<<"\n";
-    expand_capacity(ls.size());
-
-    std::copy(ls.begin(),ls.end(),_vec.get());
-    /* or
-    int i{0};
-    for (auto &&j : ls)
+    if(lst.size()>0)
     {
-        _vec[i]= j;
-        ++i;
-    }   
-    */
-    _size= ls.size();
+        expand_capacity(lst.size());
+        std::copy(lst.begin(),lst.end(),_vec.get());
+        _size= lst.size();
+    }
 }
 
 template<typename T> void Vector<T>::expand_capacity(uint expand_to)
@@ -92,7 +86,7 @@ template<typename T> void Vector<T>::expand_capacity(uint expand_to)
         case SUM:
         {
             /// @brief SUM equation: capacity - factor * floor( double(capacity/factor) - double(expand_to/factor) )
-            uint f= floor(temp_capacity/double(_sum_factor)-expand_to/double(_sum_factor));
+            int f= std::floor(temp_capacity/double(_sum_factor)-expand_to/double(_sum_factor));
             auto t= temp_capacity-(_sum_factor * f);
             if(t <= _minimal_capacity_size)
                 temp_capacity= _minimal_capacity_size;
@@ -103,51 +97,6 @@ template<typename T> void Vector<T>::expand_capacity(uint expand_to)
             throw std::invalid_argument("Unknown capacity method");
             break;
         }
-    /* // The above SUM method is faster
-    else if(expand_to < temp_capacity)
-        switch (_capacity_method)
-        {
-        case MULTIPLICATION:
-            while(true)
-            {
-                if(int(temp_capacity/_multiplication_factor) > expand_to && int(temp_capacity/_multiplication_factor) > _minimal_capacity_size)
-                    temp_capacity /= _multiplication_factor;
-                else
-                    break;
-            }
-            break;
-        case SUM:
-            while(true)
-            {
-                if(temp_capacity-_sum_factor > expand_to && temp_capacity-_sum_factor > _minimal_capacity_size)
-                    temp_capacity -= _sum_factor;
-                else
-                    break;
-            }
-            break;
-        default:
-            throw std::invalid_argument("Unknown capacity method");
-            break;
-        }
-
-    else
-    {
-        switch (_capacity_method)
-        {
-        case MULTIPLICATION:
-            while(temp_capacity < expand_to)
-                temp_capacity *= _multiplication_factor;
-            break;
-        case SUM:
-            while(temp_capacity < expand_to)
-                temp_capacity += _sum_factor;
-            break;
-        default:
-            throw std::invalid_argument("Unknown capacity method");
-            break;
-        }
-    }
-    */
 
     if(_capacity_size==temp_capacity) //the capacity is good
         return;
@@ -164,11 +113,6 @@ template<typename T> void Vector<T>::expand_capacity(uint expand_to)
         //delete[] temp_vec;
 }
 
-template<typename T> void Vector<T>::fill(uint n, T && value)
-{
-    throw;
-}
-
 template<typename T> void Vector<T>::push_back(T && value)
 {
     if(_size+1 > _capacity_size)
@@ -176,6 +120,24 @@ template<typename T> void Vector<T>::push_back(T && value)
     
     ++_size;
     _vec[_size-1]= value;
+}
+template<typename T> void Vector<T>::push_back(std::initializer_list<T> lst)
+{
+    if(_size + lst.size() > _capacity_size)
+        expand_capacity(_size + lst.size());
+
+    std::copy(lst.begin(), lst.end() , &(_vec.get()[_size]));
+    _size+= lst.size();
+}
+template<typename T> void Vector<T>::push_back(uint n, T && value)
+{
+    if(_size+n > _capacity_size)
+        expand_capacity(_size+n);
+
+    for (int i = 0; i < n; i++)
+        _vec[_size+i]= value;
+    
+    _size+= n;
 }
 
 template<typename T> void Vector<T>::drop_back(int n, bool rescale_capacity)
@@ -186,7 +148,7 @@ template<typename T> void Vector<T>::drop_back(int n, bool rescale_capacity)
         _size-= n;
 
     if(rescale_capacity)
-        expand_capacity();
+        expand_capacity(_size);
 }
 
 template<typename T> void Vector<T>::debug_print() const

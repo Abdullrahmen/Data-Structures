@@ -4,6 +4,7 @@
 #include<memory>
 #include<initializer_list>
 #include<iostream>
+#include<cmath>
 #define DEFAULT_MINIMAL_CAPACITY_SIZE 100
 #define DEFAULT_MULTIPLICATION_FACTOR 2.0
 #define DEFAULT_SUM_FACTOR 100
@@ -14,23 +15,8 @@ using uint = unsigned long;
 /// @brief Expand the capacity method
 enum CAPACITY_METHOD {MULTIPLICATION, SUM};
 
-uint floor(double&& v)
-{
-    if(v>=0)
-        return uint(v);
-    else
-        return uint(v)-1;
-}
-uint floor(double& v)
-{
-    if(v>=0)
-        return uint(v);
-    else
-        return uint(v)-1;
-}
-
 /// @brief 
-/// @tparam T Copy constructor and = operator needed
+/// @tparam T Copy constructor and = operator required
 template<typename T>
 class Vector
 {
@@ -55,25 +41,28 @@ public:
     /// @brief Move constructor
     Vector(Vector&& vec);
 
-    Vector(std::initializer_list<T> vec);
+    /// @brief Initializer list constructor
+    Vector(std::initializer_list<T> lst);
 
-    /// made initializer_list constructor instead
-    //template<typename ...E>
-    //Vector(E &&... vec);
-    
-    /// @brief Eg. v.fill{50, false} -> Add 50 elements and filled with false.
-    /// @param n Number of elements added and filled with value
-    /// @param value
-    void fill(uint n, T && value);
-
+    /// @todo
     void right_rotate(int times);
     void left_rotate(int times);
     T& pop(uint idx);
     uint find_transposition(T && value);
 
-    /// @brief Add an element at the end of the vector
-    /// @param value 
+    /// @brief Add elements at the end of the vector 
+    /// @note Eg. v.push_back(false) -> Add false at the end of the vector.
+    /// @note Eg. v.push_back({true, true, false}) -> Add 3 elements (true, true, false) at the end of the vector.
+    /// @note Eg. v.push_back(50, false) -> Add 50 elements filled with false.
     void push_back(T && value);
+    void push_back(std::initializer_list<T> lst);
+    void push_back(uint n, T && value);
+
+    /// @todo 
+    void push_back(const Vector<T> & vec);
+    void push_back(const Vector<T> && vec);
+    void operator=( Vector<T> & vec);
+    void operator=( Vector<T> && vec);
 
     /// @brief Remove last n items from the vector -Warning this won't reassign or delete the values except if the capacity rescaled 
     /// @param n drop last n items, If n >= vector size -> will delete all items in the vector.
