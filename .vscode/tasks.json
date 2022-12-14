@@ -7,9 +7,9 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${workspaceFolder}\\main.cpp",
+                "${workspaceFolder}\\Vector\\main.cpp",
                 "-o",
-                "${fileDirname}\\Vector.exe"
+                "${fileDirname}\\Vector\\Vector.exe"
             ],
             "options": {
                 "cwd": "${fileDirname}"
