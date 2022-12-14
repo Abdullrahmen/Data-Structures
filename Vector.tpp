@@ -1,5 +1,5 @@
 template<typename T> Vector<T>::Vector():
-_initial_capacity_size(DEFAULT_INITIAL_CAPACITY_SIZE),
+_minimal_capacity_size(DEFAULT_MINIMAL_CAPACITY_SIZE),
 _capacity_method(DEFAULT_CAPACITY_METHOD),
 _multiplication_factor(DEFAULT_MULTIPLICATION_FACTOR),
 _sum_factor(DEFAULT_SUM_FACTOR),
@@ -8,7 +8,7 @@ _size(0),
 _vec(nullptr){}
 
 template<typename T> Vector<T>::Vector(const Vector& vec):
-_initial_capacity_size(vec._initial_capacity_size),
+_minimal_capacity_size(vec._minimal_capacity_size),
 _capacity_method(vec._capacity_method),
 _multiplication_factor(vec._multiplication_factor),
 _sum_factor(vec._sum_factor),
@@ -23,13 +23,13 @@ _vec(new T[_capacity_size])
 }
 
 template<typename T> Vector<T>::Vector(Vector&& vec):
-_initial_capacity_size(vec._initial_capacity_size),
+_minimal_capacity_size(vec._minimal_capacity_size),
 _capacity_method(vec._capacity_method),
 _multiplication_factor(vec._multiplication_factor),
 _sum_factor(vec._sum_factor),
 _capacity_size(vec._capacity_size),
 _size(vec._size),
-_vec(vec._vec)
+_vec(std::move(vec._vec))
 {
     //std::cout<<"\n"<<"move constructor called"<<"\n";
     vec._capacity_size=0;
@@ -38,7 +38,7 @@ _vec(vec._vec)
 }
 
 template<typename T> Vector<T>::Vector(std::initializer_list<T> ls):
-_initial_capacity_size(DEFAULT_INITIAL_CAPACITY_SIZE),
+_minimal_capacity_size(DEFAULT_MINIMAL_CAPACITY_SIZE),
 _capacity_method(DEFAULT_CAPACITY_METHOD),
 _multiplication_factor(DEFAULT_MULTIPLICATION_FACTOR),
 _sum_factor(DEFAULT_SUM_FACTOR),
@@ -49,7 +49,7 @@ _vec(nullptr)
     //std::cout<<"\n"<<"initializer_list constructor called"<<"\n";
     expand_capacity(ls.size());
 
-    std::copy(ls.begin(),ls.end(),_vec);
+    std::copy(ls.begin(),ls.end(),_vec.get());
     /* or
     int i{0};
     for (auto &&j : ls)
@@ -68,8 +68,8 @@ template<typename T> void Vector<T>::expand_capacity(uint expand_to)
 
     uint temp_capacity{_capacity_size};
 
-    if (expand_to <= _initial_capacity_size)
-        temp_capacity = _initial_capacity_size;    
+    if (expand_to <= _minimal_capacity_size)
+        temp_capacity = _minimal_capacity_size;    
     else
         switch (_capacity_method)
         {
@@ -79,7 +79,7 @@ template<typename T> void Vector<T>::expand_capacity(uint expand_to)
             {
                 while(true)
                 {
-                    if(uint(temp_capacity/_multiplication_factor) > expand_to && uint(temp_capacity/_multiplication_factor) > _initial_capacity_size)
+                    if(uint(temp_capacity/_multiplication_factor) > expand_to && uint(temp_capacity/_multiplication_factor) > _minimal_capacity_size)
                         temp_capacity /= _multiplication_factor;
                     else
                         break;
@@ -94,8 +94,8 @@ template<typename T> void Vector<T>::expand_capacity(uint expand_to)
             /// @brief SUM equation: capacity - factor * floor( double(capacity/factor) - double(expand_to/factor) )
             uint f= floor(temp_capacity/double(_sum_factor)-expand_to/double(_sum_factor));
             auto t= temp_capacity-(_sum_factor * f);
-            if(t <= _initial_capacity_size)
-                temp_capacity= _initial_capacity_size;
+            if(t <= _minimal_capacity_size)
+                temp_capacity= _minimal_capacity_size;
             else
                 temp_capacity= t;
         }break;
@@ -110,7 +110,7 @@ template<typename T> void Vector<T>::expand_capacity(uint expand_to)
         case MULTIPLICATION:
             while(true)
             {
-                if(int(temp_capacity/_multiplication_factor) > expand_to && int(temp_capacity/_multiplication_factor) > _initial_capacity_size)
+                if(int(temp_capacity/_multiplication_factor) > expand_to && int(temp_capacity/_multiplication_factor) > _minimal_capacity_size)
                     temp_capacity /= _multiplication_factor;
                 else
                     break;
@@ -119,7 +119,7 @@ template<typename T> void Vector<T>::expand_capacity(uint expand_to)
         case SUM:
             while(true)
             {
-                if(temp_capacity-_sum_factor > expand_to && temp_capacity-_sum_factor > _initial_capacity_size)
+                if(temp_capacity-_sum_factor > expand_to && temp_capacity-_sum_factor > _minimal_capacity_size)
                     temp_capacity -= _sum_factor;
                 else
                     break;
@@ -153,18 +153,20 @@ template<typename T> void Vector<T>::expand_capacity(uint expand_to)
         return;
     _capacity_size= temp_capacity;
 
-    T* temp_vec= new T[_capacity_size];
+    //T* temp_vec= new T[_capacity_size]; //Changed to smart pointers
+    std::unique_ptr<T[]> temp_vec {new T[_capacity_size]};
     for (uint i = 0; i < _size; i++)
         temp_vec[i]= _vec[i];
 
     std::swap(temp_vec, _vec);
-    if(temp_vec)
-        delete[] temp_vec;
+    
+    //if(temp_vec) //Changed to smart pointers
+        //delete[] temp_vec;
 }
 
 template<typename T> void Vector<T>::fill(uint n, T && value)
 {
-
+    throw;
 }
 
 template<typename T> void Vector<T>::push_back(T && value)
@@ -176,9 +178,12 @@ template<typename T> void Vector<T>::push_back(T && value)
     _vec[_size-1]= value;
 }
 
-template<typename T> void Vector<T>::drop_back(bool rescale_capacity)
+template<typename T> void Vector<T>::drop_back(int n, bool rescale_capacity)
 {
-    --_size;
+    if(n >= _size)
+        _size=0;
+    else
+        _size-= n;
 
     if(rescale_capacity)
         expand_capacity();
@@ -204,13 +209,13 @@ template<typename T> const uint Vector<T>::get_capacity_size() const
     return _capacity_size;
 }
 
-template<typename T> const uint Vector<T>::get_initial_capacity_size() const
+template<typename T> const uint Vector<T>::get_minimal_capacity_size() const
 {
-    return _initial_capacity_size;
+    return _minimal_capacity_size;
 }
-template<typename T> void Vector<T>::set_initial_capacity_size(uint initial_capacity_size)
+template<typename T> void Vector<T>::set_minimal_capacity_size(uint minimal_capacity_size)
 {
-    _initial_capacity_size= initial_capacity_size;
+    _minimal_capacity_size= minimal_capacity_size;
     expand_capacity(_size);
 }
 
@@ -246,6 +251,7 @@ template<typename T> void Vector<T>::set_sum_factor(uint factor)
 
 template<typename T> Vector<T>::~Vector()
 {
-    if(_vec)
-        delete[] _vec;
+    //Changed to smart pointers
+    //if(_vec)
+        //delete[] _vec;
 }

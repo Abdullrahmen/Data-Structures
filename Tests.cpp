@@ -1,7 +1,7 @@
 #include "Vector.h"
 #include <iostream>
 #include <assert.h>
-/// @brief Test SUM method + initilizer_list constructor
+/// @brief Test SUM method + initializer_list constructor
 void test1()
 {   
     auto z{"4"};
@@ -12,13 +12,13 @@ void test1()
 
     v.set_sum_factor(3);
     v.set_capacity_method(SUM);
-    assert(v.get_capacity_size()==DEFAULT_INITIAL_CAPACITY_SIZE);
+    assert(v.get_capacity_size()==DEFAULT_MINIMAL_CAPACITY_SIZE);
 
-    v.set_initial_capacity_size(3);
+    v.set_minimal_capacity_size(3);
     assert(v.get_capacity_size()==7);
 
     v.push_back(y);
-    v.push_back(a);
+    v.push_back(std::move(a));
     assert(v.get_capacity_size()==7);
 
     v.push_back("6");
@@ -27,14 +27,15 @@ void test1()
     std::cout<<"Test1 passed"<<"\n";
 
 }
-/// @brief Test MULTIPLICATION method + initilizer_list constructor
+
+/// @brief Test MULTIPLICATION method + initializer_list constructor
 void test2()
 {
     Vector<int> v{1};
     v.set_multiplication_factor(2);
-    assert(v.get_capacity_size()==DEFAULT_INITIAL_CAPACITY_SIZE);
+    assert(v.get_capacity_size()==DEFAULT_MINIMAL_CAPACITY_SIZE);
 
-    v.set_initial_capacity_size(2);
+    v.set_minimal_capacity_size(2);
     assert(v.get_capacity_size()==2);
 
     v.set_capacity_method(MULTIPLICATION);
@@ -65,3 +66,7 @@ void test3()
 
     std::cout<<"Test3 passed"<<"\n";
 }
+
+void test4()
+{}
+

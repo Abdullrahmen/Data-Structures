@@ -1,10 +1,10 @@
 #ifndef Vector_H_
 #define Vector_H_
 
-//#include<memory>
+#include<memory>
 #include<initializer_list>
 #include<iostream>
-#define DEFAULT_INITIAL_CAPACITY_SIZE 100
+#define DEFAULT_MINIMAL_CAPACITY_SIZE 100
 #define DEFAULT_MULTIPLICATION_FACTOR 2.0
 #define DEFAULT_SUM_FACTOR 100
 #define DEFAULT_CAPACITY_METHOD MULTIPLICATION
@@ -39,9 +39,10 @@ private:
     CAPACITY_METHOD _capacity_method;
     double _multiplication_factor;
     uint _sum_factor;
-    uint _initial_capacity_size;
+    uint _minimal_capacity_size;
     uint _capacity_size;
-    T* _vec;
+    std::unique_ptr<T[]> _vec;
+    //T* _vec; changed to smart pointers
 
     void expand_capacity(uint expand_to);
 public:
@@ -65,13 +66,19 @@ public:
     /// @param value
     void fill(uint n, T && value);
 
+    void right_rotate(int times);
+    void left_rotate(int times);
+    T& pop(uint idx);
+    uint find_transposition(T && value);
+
     /// @brief Add an element at the end of the vector
     /// @param value 
     void push_back(T && value);
 
-    /// @brief Remove last item from the vector -Warning this won't reassign or delete the value immediately except if the capacity rescaled 
+    /// @brief Remove last n items from the vector -Warning this won't reassign or delete the values except if the capacity rescaled 
+    /// @param n drop last n items, If n >= vector size -> will delete all items in the vector.
     /// @param rescale_capacity Rescale capacity if the capacity method conditions applied
-    void drop_back(bool rescale_capacity= true);
+    void drop_back(int n=1, bool rescale_capacity= true);
 
     void debug_print() const;
 
@@ -79,9 +86,9 @@ public:
     const uint get_capacity_size() const;
 
     /// @brief First capacity size
-    const uint get_initial_capacity_size() const;
-    /// @param initial_capacity_size First capacity size
-    void set_initial_capacity_size(uint initial_capacity_size);
+    const uint get_minimal_capacity_size() const;
+    /// @param minimal_capacity_size First capacity size
+    void set_minimal_capacity_size(uint minimal_capacity_size);
 
     /// @brief capacity_method Expand the capacity method
     const CAPACITY_METHOD get_capacity_method() const;
