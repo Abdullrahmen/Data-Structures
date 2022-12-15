@@ -67,7 +67,9 @@ public:
     /// @brief Remove last n items from the vector -Warning this won't reassign or delete the values except if the capacity rescaled 
     /// @param n drop last n items, If n >= vector size -> will delete all items in the vector.
     /// @param rescale_capacity Rescale capacity if the capacity method conditions applied
-    void drop_back(int n=1, bool rescale_capacity= true);
+    void drop_back(uint n=1, bool rescale_capacity= true);
+
+    T& operator[] (long long n);
 
     void debug_print() const;
 

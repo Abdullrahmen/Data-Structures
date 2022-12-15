@@ -140,7 +140,7 @@ template<typename T> void Vector<T>::push_back(uint n, T && value)
     _size+= n;
 }
 
-template<typename T> void Vector<T>::drop_back(int n, bool rescale_capacity)
+template<typename T> void Vector<T>::drop_back(uint n, bool rescale_capacity)
 {
     if(n >= _size)
         _size=0;
@@ -149,6 +149,16 @@ template<typename T> void Vector<T>::drop_back(int n, bool rescale_capacity)
 
     if(rescale_capacity)
         expand_capacity(_size);
+}
+
+template<typename T> T& Vector<T>::operator[] (long long n)
+{
+    if(n < 0 && -n <= _size)
+        return _vec[_size+n];
+    else if(n >= 0 && n < _size)
+        return _vec[n];
+
+    throw(std::out_of_range("OOR"));
 }
 
 template<typename T> void Vector<T>::debug_print() const

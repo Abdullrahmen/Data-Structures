@@ -98,3 +98,22 @@ void test4()
     //v.debug_print();
 }
 
+/// @brief Test [] operator
+void test5()
+{
+    Vector<int> v{1};
+    v.set_sum_factor(3);
+    v.set_minimal_capacity_size(5);
+    v.set_capacity_method(SUM);
+
+    v.push_back({2,3,4,5,6});
+
+    assert(v[0]==1);
+    assert(v[-1]==6);
+    assert(v[2]==3);
+
+    //std::cout<<v[-6];
+    //v.debug_print();
+
+    std::cout<<"Test5 passed"<<"\n";
+}
