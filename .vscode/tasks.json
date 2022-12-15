@@ -9,7 +9,7 @@
                 "-g",
                 "${workspaceFolder}\\Linked List\\main.cpp",
                 "-o",
-                "${fileDirname}\\Linked List\\LL.exe"
+                "${workspaceFolder}\\Linked List\\LL.exe"
             ],
             "options": {
                 "cwd": "${fileDirname}"
