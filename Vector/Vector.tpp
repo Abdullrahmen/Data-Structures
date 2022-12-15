@@ -14,7 +14,7 @@ _multiplication_factor(vec._multiplication_factor),
 _sum_factor(vec._sum_factor),
 _capacity_size(vec._capacity_size),
 _size(vec._size),
-_vec(new T[_capacity_size])
+_vec(std::make_unique<T[]>(_capacity_size))
 {
     //std::cout<<"\n"<<"copy constructor called"<<"\n";
 
@@ -103,7 +103,7 @@ template<typename T> void Vector<T>::expand_capacity(uint expand_to)
     _capacity_size= temp_capacity;
 
     //T* temp_vec= new T[_capacity_size]; //Changed to smart pointers
-    std::unique_ptr<T[]> temp_vec {new T[_capacity_size]};
+    std::unique_ptr<T[]> temp_vec = std::make_unique<T[]>(_capacity_size);
     for (uint i = 0; i < _size; i++)
         temp_vec[i]= _vec[i];
 
