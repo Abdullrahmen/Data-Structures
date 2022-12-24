@@ -3,13 +3,13 @@
         {
             "type": "cppbuild",
             "label": "C/C++: g++.exe build active file",
-            "command": "C:\\msys64\\mingw64\\bin\\g++.exe",
+            "command": "C:\\MinGW\\bin\\g++.exe",
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${workspaceFolder}\\Linked List\\main.cpp",
+                "${fileDirname}\\main.cpp",
                 "-o",
-                "${workspaceFolder}\\Linked List\\LL.exe"
+                "${fileDirname}\\a.exe"
             ],
             "options": {
                 "cwd": "${fileDirname}"

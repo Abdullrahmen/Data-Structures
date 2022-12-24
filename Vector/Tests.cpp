@@ -107,10 +107,15 @@ void test5()
     v.set_capacity_method(SUM);
 
     v.push_back({2,3,4,5,6});
+    v[-2] =-1;
+    v[3] =-2;
 
     assert(v[0]==1);
     assert(v[-1]==6);
+    assert(v[-2]==-1);
     assert(v[2]==3);
+    assert(v[3]==-2);
+
 
     //std::cout<<v[-6];
     //v.debug_print();
