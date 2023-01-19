@@ -43,22 +43,22 @@ _size(0)
 template<typename T> SinglyLinkedList<T>::SinglyLinkedList(const SinglyLinkedList& lst):
 _head(nullptr), 
 _tail(nullptr),
-_size(lst._size)
+_size(0)
 {
     //std::cout<<"\n"<<"copy constructor called"<<"\n";
+    if (!lst._size)
+        return;
 
-    if(_size)
+    _SinglyLL::Node<T>* itr = lst._head.get();
+    _head= std::make_unique<_SinglyLL::Node<T>>(*itr); //copy head node.
+    _tail= _head.get();
+    ++_size;
+
+    for (; _size < lst._size; ++_size)
     {
-        _SinglyLL::Node<T>* tmp_itr1 = lst._head.get();
-        _head= std::make_unique<_SinglyLL::Node<T>>(*tmp_itr1); //copy head node.
-        _tail= _head.get();
-
-        for (int i = 1; i < _size; i++)
-        {
-            tmp_itr1= tmp_itr1->next().get();
-            _tail->next() = std::make_unique<_SinglyLL::Node<T>>(*tmp_itr1); // copy next node.
-            _tail = _tail->next().get();
-        }
+        itr= itr->next().get();
+        _tail->next() = std::make_unique<_SinglyLL::Node<T>>(*itr); // copy next node.
+        _tail = _tail->next().get();
     }
 }
 
@@ -81,13 +81,13 @@ _size(lst.size())
     if(lst.size())
     {
         auto j{lst.begin()};
-        initialize_head_tail(std::move(*j)); //copy first value to new head node.
+        initialize_head_tail(*j); //copy first value to new head node.
         _tail= _head.get();
         ++j;
 
         for (int i = 1; i < lst.size(); i++,++j)
         {
-            _tail->next()= std::make_unique<_SinglyLL::Node<T>>(_SinglyLL::Node<T>{std::move(*j)});
+            _tail->next()= std::make_unique<_SinglyLL::Node<T>>(_SinglyLL::Node<T>{*j});
             _tail= _tail->next().get();
         }
     }
@@ -155,13 +155,13 @@ template<typename T> void SinglyLinkedList<T>::push_back(std::initializer_list<T
     else
     {
         auto j{lst.begin()};
-        initialize_head_tail(std::move(*j)); //copy first value to head node.
+        initialize_head_tail(*j); //copy first value to head node.
         _tail= _head.get();
         ++j;
 
         for (int i = 1; i < lst.size(); i++,++j)
         {
-            _tail->next()= std::make_unique<_SinglyLL::Node<T>>(_SinglyLL::Node<T>{std::move(*j)});
+            _tail->next()= std::make_unique<_SinglyLL::Node<T>>(_SinglyLL::Node<T>{*j});
             _tail= _tail->next().get();
         }
         _size+= lst.size();
@@ -217,18 +217,18 @@ template<typename T> _SinglyLL::Node<T>* SinglyLinkedList<T>::get_node(long long
 
     if(n==_size-1)
         return _tail;
-    else if (n==0)
-        return _head.get();
     
-    if(n > 0 && n < _size)
-    {
-        _SinglyLL::Node<T>* itr{_head.get()};
-        for (int i = 0; i < n; i++)
-            itr= itr->next().get();
+    if (n==0)
+        return _head.get();
 
-        return itr;
-    }
-    throw(std::out_of_range("OOR"));
+    if (n <= 0 || n >= _size)
+        throw(std::out_of_range("OOR"));
+
+    _SinglyLL::Node<T>* itr{_head.get()};
+    for (int i = 0; i < n; i++)
+        itr= itr->next().get();
+
+    return itr;
 }
 
 template<typename T> T& SinglyLinkedList<T>::operator[] (long long n)
@@ -243,12 +243,12 @@ template<typename T> uint SinglyLinkedList<T>::get_size() const
 
 template<typename T> void SinglyLinkedList<T>::debug_print() const
 {
-    _SinglyLL::Node<T>* tmp{_head.get()};
+    _SinglyLL::Node<T>* itr{_head.get()};
     std::cout<<"\n"<<_size<<"\n";
     for (int i = 0; i < _size; i++)
     {
-        std::cout<<*(tmp->value())<<"\t";
-        tmp= tmp->next().get();
+        std::cout<<*(itr->value())<<"\t";
+        itr= itr->next().get();
     }
 }
 

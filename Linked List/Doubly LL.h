@@ -42,10 +42,46 @@ private:
     std::unique_ptr<_DoublyLL::Node<T>> _head;
     _DoublyLL::Node<T>* _tail;
     uint _size;
+    uint _debug_get_node_counter_{0};
+
+    /// @brief If _head is empty it will initialize it with value only without increase _size
+    void initialize_head_tail(T &&value);
+    void initialize_head_tail(const T &value);
 
     _DoublyLL::Node<T>* get_node(long long n);
 public:
-    DoublyLinkedList(/* args */);
+    /// @brief Empty constructor
+    DoublyLinkedList();
+
+    /// @brief Copy constructor
+    DoublyLinkedList(const DoublyLinkedList &lst);
+
+    /// @brief Move constructor
+    DoublyLinkedList(DoublyLinkedList &&lst);
+
+    /// @brief Initializer list constructor
+    DoublyLinkedList(std::initializer_list<T> &&lst);
+
+    /// @brief Add elements at the end of the list
+    /// @note Eg. lst.push_back(false) -> Add false at the end of the list.
+    /// @note Eg. lst.push_back({true, true, false}) -> Add 3 elements (true, true, false) at the end of the list.
+    /// @note Eg. lst.push_back(50, false) -> Add 50 elements filled with false.
+    void push_back(const T &value);
+    void push_back(T &&value);
+    void push_back(std::initializer_list<T> &&lst);
+    void push_back(uint n, T &&value);
+    void push_back(uint n, const T &value);
+
+    /// @brief Drop last n items from the list
+    /// @param n drop last n items, If n >= list size -> will delete all items in the list.
+    void drop_back(uint n = 1);
+
+    T &operator[](long long n);
+
+    void debug_print() const;
+
+    uint get_size() const;
+
     ~DoublyLinkedList();
 };
 
