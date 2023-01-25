@@ -47,7 +47,7 @@ public:
     /// @todo
     void right_rotate(int times);
     void left_rotate(int times);
-    T& pop(uint idx);
+    T& drop(uint idx);
     uint find_transposition(T && value);
 
     /// @brief Add elements at the end of the vector 
@@ -60,9 +60,9 @@ public:
 
     /// @todo 
     void push_back(const Vector<T> & vec);
-    void push_back(const Vector<T> && vec);
-    void operator=( Vector<T> & vec);
-    void operator=( Vector<T> && vec);
+    void push_back(Vector<T> && vec);
+    void operator=(Vector<T> & vec);
+    void operator=(Vector<T> && vec);
 
     /// @brief Remove last n items from the vector -Warning this won't reassign or delete the values except if the capacity rescaled 
     /// @param n drop last n items, If n >= vector size -> will delete all items in the vector.
