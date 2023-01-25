@@ -68,16 +68,28 @@ public:
     void push_back(std::initializer_list<T> &&lst);
     void push_back(uint n, T &&value);
     void push_back(uint n, const T &value);
+    ///@todo
+    void push_back(const SinglyLinkedList<T> & lst);
+    void push_back(SinglyLinkedList<T> && lst);
 
     /// @brief Drop last n items from the list
     /// @param n drop last n items, If n >= list size -> will delete all items in the list.
     void drop_back(uint n=1);
+    ///@todo
+    T& drop(uint n);
 
     T& operator[] (long long n);
+    ///@todo
+    void operator=(SinglyLinkedList<T> &lst);
+    void operator=(SinglyLinkedList<T> &&lst);
 
     void debug_print() const;
 
-    uint get_size() const; 
+    uint get_size() const;
+
+    ///@todo
+    void insert();
+    uint search();
 
     ~SinglyLinkedList();
 };

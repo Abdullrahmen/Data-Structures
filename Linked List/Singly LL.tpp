@@ -78,19 +78,20 @@ _size(lst.size())
 {
     //std::cout<<"\n"<<"initializer_list called"<<"\n";
     
-    if(lst.size())
-    {
-        auto j{lst.begin()};
-        initialize_head_tail(*j); //copy first value to new head node.
-        _tail= _head.get();
-        ++j;
+    if(!lst.size())
+        return;
 
-        for (int i = 1; i < lst.size(); i++,++j)
-        {
-            _tail->next()= std::make_unique<_SinglyLL::Node<T>>(_SinglyLL::Node<T>{*j});
-            _tail= _tail->next().get();
-        }
+    auto j{lst.begin()};
+    initialize_head_tail(*j); //copy first value to new head node.
+    _tail= _head.get();
+    ++j;
+
+    for (int i = 1; i < lst.size(); i++,++j)
+    {
+        _tail->next()= std::make_unique<_SinglyLL::Node<T>>(_SinglyLL::Node<T>{*j});
+        _tail= _tail->next().get();
     }
+    
 }
 
 template<typename T> void SinglyLinkedList<T>::initialize_head_tail(T&& value)

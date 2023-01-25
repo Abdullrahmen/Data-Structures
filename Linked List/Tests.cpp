@@ -6,7 +6,7 @@
 void s_test1()
 {
     // Initializer list constructor
-    SinglyLinkedList<int>&& lst{1,2,3,4,5,6,7};
+    SinglyLinkedList<int> &&lst{1, 2, 3, 4, 5, 6, 7};
     lst.push_back(8);
 
     // Move constructor
@@ -84,7 +84,34 @@ void s_test3()
     std::cout<<"s_Test3 passed"<<"\n";
 }
 
+/// @brief Test all constructors
 void d_test1()
 {
+    // Initializer list constructor
+    DoublyLinkedList<int> &&lst{1, 2, 3, 4, 5, 6, 7};
+    lst.push_back(8);
 
+    // Move constructor
+    DoublyLinkedList<int> lst2{std::move(lst)};
+    
+    assert(lst2.get_size() == 8);
+
+    lst2.push_back(9);
+    assert(lst2.get_size() == 9);
+
+    // Copy constructor
+    DoublyLinkedList<int> lst3{lst2};
+    lst3.push_back(10);
+    assert(lst3.get_size() == 10);
+
+    // Empty constructor
+    DoublyLinkedList<int> lst4{};
+    lst4.push_back(1);
+    assert(lst4.get_size() == 1);
+
+    std::cout << "d_Test1 passed"
+              << "\n";
+    // lst2.debug_print();
+    // lst3.debug_print();
 }
+

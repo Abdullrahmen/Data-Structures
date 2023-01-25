@@ -31,7 +31,7 @@ namespace _DoublyLL
 
         std::unique_ptr<T>& value();
         std::unique_ptr<Node<T>>& next();
-        Node<T>* previous();
+        Node<T>*& previous();
     };
 }
 
