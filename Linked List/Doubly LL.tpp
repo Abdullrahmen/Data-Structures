@@ -46,14 +46,16 @@ template<typename T> DoublyLinkedList<T>::DoublyLinkedList():
 _head(nullptr),
 _tail(nullptr),
 _size(0)
-{std::cout<<"Empty constructor called"<<"\n";}
+{
+    //std::cout<<"Empty constructor called"<<"\n";
+}
 
 template<typename T> DoublyLinkedList<T>::DoublyLinkedList(const DoublyLinkedList &lst):
 _head(nullptr),
 _tail(nullptr),
 _size(0)
 {
-    std::cout<<"Copy constructor called"<<"\n";
+    //std::cout<<"Copy constructor called"<<"\n";
 
     if(!lst._size)
         return;
@@ -79,7 +81,7 @@ _head(std::move(lst._head)),
 _tail(lst._tail),
 _size(lst._size)
 {
-    std::cout<<"Move constructor called."<<"\n";
+    //std::cout<<"Move constructor called."<<"\n";
 }
 
 template<typename T> DoublyLinkedList<T>::DoublyLinkedList(std::initializer_list<T> &&lst):
@@ -87,7 +89,7 @@ _head(nullptr),
 _tail(nullptr),
 _size(0)
 {
-    std::cout<<"\n"<<"initializer_list called"<<"\n";
+    //std::cout<<"\n"<<"initializer_list called"<<"\n";
 
     if(!lst.size())
         return;
@@ -153,6 +155,13 @@ template<typename T> _DoublyLL::Node<T>* DoublyLinkedList<T>::get_node(long long
 
 template<typename T> void DoublyLinkedList<T>::push_back(const T& value)
 {
+    if(!_size)
+    {
+        initialize_head_tail(value);
+        ++_size;
+        return;
+    }
+
     _DoublyLL::Node<T> *tmp_previous{_tail};
     _tail->next() = std::make_unique<_DoublyLL::Node<T>>(value);
     _tail= _tail->next().get();
@@ -161,6 +170,13 @@ template<typename T> void DoublyLinkedList<T>::push_back(const T& value)
 }
 template<typename T> void DoublyLinkedList<T>::push_back(T&& value)
 {
+    if(!_size)
+    {
+        initialize_head_tail(std::move(value));
+        ++_size;
+        return;
+    }
+
     _DoublyLL::Node<T> *tmp_previous{_tail};
     _tail->next() = std::make_unique<_DoublyLL::Node<T>>(std::move(value));
     _tail = _tail->next().get();
@@ -169,29 +185,84 @@ template<typename T> void DoublyLinkedList<T>::push_back(T&& value)
 }
 template<typename T> void DoublyLinkedList<T>::push_back(std::initializer_list<T> &&lst)
 {
+    if (!lst.size())
+        return;
+
+    auto tmp_size= _size + lst.size(); 
+
+    auto j{lst.begin()};
+    if(!_size)
+    {
+        initialize_head_tail(*j);
+        ++_size;
+        ++j;
+    }
     
+    _DoublyLL::Node<T> *tmp_previous{nullptr};
+    for (; _size < tmp_size; ++_size, ++j)
+    {
+        _tail->next()= std::make_unique<_DoublyLL::Node<T>>(*j);
+        tmp_previous= _tail;
+        _tail= _tail->next();
+        _tail->previous= tmp_previous;
+    }
 }
 template<typename T> void DoublyLinkedList<T>::push_back(uint n, T &&value)
 {
-    
+    if(!n)
+        return;
+
+    auto tmp_size= _size + n;
+
+    if(!_size)
+    {
+        initialize_head_tail(std::move(value));
+        ++_size;
+    }
+
+    _DoublyLL::Node<T> *tmp_previous{nullptr};
+    for (; _size < tmp_size; ++_size)
+    {
+        _tail->next()= std::make_unique<_DoublyLL::Node<T>>(std::move(value));
+        tmp_previous= _tail;
+        _tail= _tail->next();
+        _tail->previous= tmp_previous;
+    }
 }
 template<typename T> void DoublyLinkedList<T>::push_back(uint n, const T &value)
 {
-    
+    if(!n)
+        return;
+
+    auto tmp_size= _size + n;
+
+    if(!_size)
+    {
+        initialize_head_tail(value);
+        ++_size;
+    }
+
+    _DoublyLL::Node<T> *tmp_previous{nullptr};
+    for (; _size < tmp_size; ++_size)
+    {
+        _tail->next()= std::make_unique<_DoublyLL::Node<T>>(value);
+        tmp_previous= _tail;
+        _tail= _tail->next();
+        _tail->previous= tmp_previous;
+    }
 }
 
 template<typename T> void DoublyLinkedList<T>::initialize_head_tail(T &&value)
 {
-    if(_head)
+    if(_head.get())
         return;
     
     _head= std::make_unique<_DoublyLL::Node<T>>(_DoublyLL::Node<T>{std::move(value)});
     _tail= _head.get();
 }
-
 template<typename T> void DoublyLinkedList<T>::initialize_head_tail(const T &value)
 {
-    if (_head)
+    if(_head.get())
         return;
 
     _head= std::make_unique<_DoublyLL::Node<T>>(_DoublyLL::Node<T>{value});

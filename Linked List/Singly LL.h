@@ -41,7 +41,7 @@ private:
     _SinglyLL::Node<T>* _tail;
     uint _size;
 
-    /// @brief If _head is empty it will initialize it with value only without increase _size
+    /// @brief If _head is empty, will initialize it with value without increase _size
     void initialize_head_tail(T &&value);
     void initialize_head_tail(const T &value);
 

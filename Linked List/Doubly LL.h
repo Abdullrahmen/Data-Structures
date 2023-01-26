@@ -44,7 +44,7 @@ private:
     uint _size;
     uint _debug_get_node_counter_{0};
 
-    /// @brief If _head is empty it will initialize it with value only without increase _size
+    /// @brief If _head is empty, will initialize it with value without increase _size
     void initialize_head_tail(T &&value);
     void initialize_head_tail(const T &value);
 

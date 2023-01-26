@@ -109,9 +109,30 @@ void d_test1()
     lst4.push_back(1);
     assert(lst4.get_size() == 1);
 
-    std::cout << "d_Test1 passed"
-              << "\n";
-    // lst2.debug_print();
+    std::cout << "d_Test1 passed"<< "\n";
     // lst3.debug_print();
 }
 
+/// @brief Test push_back
+void d_test2()
+{
+    SinglyLinkedList<int> lst{1};
+    lst.push_back({2,3,4,5});
+    assert(lst.get_size()==5);
+    
+    lst.push_back(6);
+    assert(lst.get_size()==6);
+
+    auto x{9};
+    lst.push_back(x);
+    assert(lst.get_size() == 7);
+
+    lst.push_back(10, -1);
+    assert(lst.get_size() == 17);
+
+    lst.push_back(3, x);
+    assert(lst.get_size() == 20);
+
+    //lst.debug_print();
+    std::cout<<"d_Test2 passed"<<"\n";
+}
