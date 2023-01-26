@@ -73,7 +73,8 @@ public:
     void push_back(SinglyLinkedList<T> && lst);
 
     /// @brief Drop last n items from the list
-    /// @param n drop last n items, If n >= list size -> will delete all items in the list.
+    /// @param n drop last n items
+    /// @note If n >= list size -> will delete all items in the list.
     void drop_back(uint n=1);
     ///@todo
     T& drop(uint n);

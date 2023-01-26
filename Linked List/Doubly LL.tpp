@@ -133,7 +133,7 @@ template<typename T> _DoublyLL::Node<T>* DoublyLinkedList<T>::get_node(long long
         itr= _head.get();
         for (int i = 0; i < n; i++)
         {
-            itr = itr->_next.get();
+            itr = itr->next().get();
 
             /// @bug for debugging
             ++_debug_get_node_counter_;
@@ -142,9 +142,9 @@ template<typename T> _DoublyLL::Node<T>* DoublyLinkedList<T>::get_node(long long
     else //Loop from _tail
     {
         itr= _tail;
-        for (int i = 0; i < _size-n; i++)
+        for (int i = 0; i < _size-n-1; i++)
         {
-            itr= itr->_previous;
+            itr= itr->previous();
 
             /// @bug for debugging
             ++_debug_get_node_counter_;
@@ -203,8 +203,8 @@ template<typename T> void DoublyLinkedList<T>::push_back(std::initializer_list<T
     {
         _tail->next()= std::make_unique<_DoublyLL::Node<T>>(*j);
         tmp_previous= _tail;
-        _tail= _tail->next();
-        _tail->previous= tmp_previous;
+        _tail= _tail->next().get();
+        _tail->previous()= tmp_previous;
     }
 }
 template<typename T> void DoublyLinkedList<T>::push_back(uint n, T &&value)
@@ -225,8 +225,8 @@ template<typename T> void DoublyLinkedList<T>::push_back(uint n, T &&value)
     {
         _tail->next()= std::make_unique<_DoublyLL::Node<T>>(std::move(value));
         tmp_previous= _tail;
-        _tail= _tail->next();
-        _tail->previous= tmp_previous;
+        _tail= _tail->next().get();
+        _tail->previous()= tmp_previous;
     }
 }
 template<typename T> void DoublyLinkedList<T>::push_back(uint n, const T &value)
@@ -247,9 +247,26 @@ template<typename T> void DoublyLinkedList<T>::push_back(uint n, const T &value)
     {
         _tail->next()= std::make_unique<_DoublyLL::Node<T>>(value);
         tmp_previous= _tail;
-        _tail= _tail->next();
-        _tail->previous= tmp_previous;
+        _tail= _tail->next().get();
+        _tail->previous()= tmp_previous;
     }
+}
+
+template<typename T> void DoublyLinkedList<T>::drop_back(uint n)
+{
+    if(n==0)
+        return;
+    if(n >= _size)
+    {
+        _size= 0;
+        _tail= nullptr;
+        _head.reset();
+        return;
+    }
+
+    _tail= get_node(_size-(n+1));
+    _tail->next().reset();
+    _size-= n;
 }
 
 template<typename T> void DoublyLinkedList<T>::initialize_head_tail(T &&value)

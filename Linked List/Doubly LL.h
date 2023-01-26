@@ -42,7 +42,6 @@ private:
     std::unique_ptr<_DoublyLL::Node<T>> _head;
     _DoublyLL::Node<T>* _tail;
     uint _size;
-    uint _debug_get_node_counter_{0};
 
     /// @brief If _head is empty, will initialize it with value without increase _size
     void initialize_head_tail(T &&value);
@@ -50,6 +49,8 @@ private:
 
     _DoublyLL::Node<T>* get_node(long long n);
 public:
+    uint _debug_get_node_counter_{0};
+    
     /// @brief Empty constructor
     DoublyLinkedList();
 
@@ -73,7 +74,8 @@ public:
     void push_back(uint n, const T &value);
 
     /// @brief Drop last n items from the list
-    /// @param n drop last n items, If n >= list size -> will delete all items in the list.
+    /// @param n drop last n items
+    /// @note If n >= list size -> will delete all items in the list.
     void drop_back(uint n = 1);
 
     T &operator[](long long n);

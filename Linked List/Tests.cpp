@@ -116,7 +116,7 @@ void d_test1()
 /// @brief Test push_back
 void d_test2()
 {
-    SinglyLinkedList<int> lst{1};
+    DoublyLinkedList<int> lst{1};
     lst.push_back({2,3,4,5});
     assert(lst.get_size()==5);
     
@@ -135,4 +135,44 @@ void d_test2()
 
     //lst.debug_print();
     std::cout<<"d_Test2 passed"<<"\n";
+}
+
+/// @brief Test [] operator and drop_back
+void d_test3()
+{
+    DoublyLinkedList<int> lst{1, 2, 3, 4, 5, 6, 7};
+    lst.drop_back();
+    assert(lst.get_size() == 6);
+    lst.drop_back(3);
+    assert(lst.get_size() == 3);
+
+    assert(lst[0] == 1);
+    assert(lst[1] == 2);
+    assert(lst._debug_get_node_counter_==1);
+    assert(lst[-1] == 3);
+
+    auto x{4};
+    lst[0] = 4;
+    lst[1] = 5;
+    assert(lst._debug_get_node_counter_==1);
+    lst[-1] = 6;
+    assert(lst[0] == 4);
+    assert(lst[1] == 5);
+    assert(lst[-1] == 6);
+    assert(lst[2] == 6);
+    lst.push_back({1,2,3,4,5});
+    assert(lst[-2] == 4);
+    assert(lst._debug_get_node_counter_== 1);
+    assert(lst[-4] == 2);
+    assert(lst._debug_get_node_counter_ == 3);
+    assert(lst[-5] == 1);
+    assert(lst._debug_get_node_counter_ == 3);
+    assert(lst[-6] == 6);
+    assert(lst._debug_get_node_counter_ == 2);
+
+    lst.drop_back(10);
+    assert(lst.get_size() == 0);
+
+    // lst.debug_print();
+    std::cout << "d_Test3 passed"<< "\n";
 }
