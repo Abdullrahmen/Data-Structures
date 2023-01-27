@@ -9,7 +9,7 @@
 #define DEFAULT_MULTIPLICATION_FACTOR 2.0
 #define DEFAULT_SUM_FACTOR 100
 #define DEFAULT_CAPACITY_METHOD MULTIPLICATION
-#define DEFAULT_CONSTRUCTION_METHOD LIST
+//#define DEFAULT_CONSTRUCTION_METHOD LIST
 using uint = unsigned long;
 
 /// @brief Expand the capacity method
