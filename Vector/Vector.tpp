@@ -161,6 +161,16 @@ template<typename T> T& Vector<T>::operator[] (long long n)
     throw(std::out_of_range("OOR"));
 }
 
+template<typename T> const T& Vector<T>::operator[] (long long n) const
+{
+    if(n < 0 && -n <= _size)
+        return _vec[_size+n];
+    else if(n >= 0 && n < _size)
+        return _vec[n];
+
+    throw(std::out_of_range("OOR"));
+}
+
 template<typename T> void Vector<T>::debug_print() const
 {
     std::cout<<"\n"<<_capacity_size<<"\n"<<_size<<"\n";

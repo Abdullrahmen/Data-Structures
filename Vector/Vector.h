@@ -69,7 +69,8 @@ public:
     /// @param rescale_capacity Rescale capacity if the capacity method conditions applied
     void drop_back(uint n=1, bool rescale_capacity= true);
 
-    T& operator[] (long long n);
+    T &operator[](long long n);
+    const T &operator[](long long n) const;
 
     void debug_print() const;
 
@@ -78,7 +79,7 @@ public:
 
     /// @brief First capacity size
     const uint get_minimal_capacity_size() const;
-    /// @param minimal_capacity_size First capacity size
+    /// @param minimal_capacity_size Minimal capacity size
     void set_minimal_capacity_size(uint minimal_capacity_size);
 
     /// @brief capacity_method Expand the capacity method
