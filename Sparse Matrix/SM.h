@@ -7,6 +7,7 @@
 #include <initializer_list>
 #include <iostream>
 #include <variant>
+#include <optional>
 
 using uint = unsigned long;
 
@@ -25,6 +26,7 @@ namespace _SparseMat
 
     public:
         Coord();
+        Coord(std::initializer_list<int> &&coord);
         Coord(const Vector<int> &coord);
         Coord(Vector<int> &&coord);
 
@@ -85,8 +87,23 @@ private:
     /// @brief All values except _default_value in the matrix
     std::unique_ptr<SPECIAL_VALUES_TYPE> _special_values;
 
+    /// @brief Check _shape validity
+    /// @return _shape validity
+    bool check_shape_validity();
+    
+    /// @brief Check coordinate validity and if there are negative flip the direction
+    /// @param coord 
+    /// @return coordinate validity
+    bool check_coord_validity(Coord &coord);
+
     /// @brief Specify _special_values type according to the dimension of the shape
     void specify_special_values_type();
+
+    /// @brief Get last dimension from special_values according to coordinate and shape dimension
+    /// @param coord full coordinate
+    /// @return Last dimension from special_values
+    /// @note coord won't checked (assume already checked + shape dimension>0)
+    LL<Item<T>>* get_last_dim(const Coord& coord);
 public:
     /// @brief Empty constructor
     ///SparseMat();
@@ -108,18 +125,20 @@ public:
     /// @brief Set a value to a specific coordinates.
     /// @param coord 
     /// @param value 
-    void set_value(const Coord &coord, const T &value);
-    void set_value(const Coord &coord, T &&value);
+    void set_value(Coord coord, const T &value);
+    void set_value(Coord coord, T &&value);
 
     /// @brief 
     /// @param coord 
     /// @return The item that has the coord
-    T &operator[](const Coord &coord);
+    const T &operator[](Coord coord);
 
+    /*
     /// @brief
     /// @param idx
     /// @return A new sparse matrix with less one dimension or if dimension is 1 return the item that has the idx
     std::variant<SparseMat<T>,T&> operator[](uint idx);
+    */
 
     /// @brief Reset the value in the coordinate to the default value
     /// @param coord
