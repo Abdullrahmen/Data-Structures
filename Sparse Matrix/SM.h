@@ -7,7 +7,6 @@
 #include <initializer_list>
 #include <iostream>
 #include <variant>
-#include <optional>
 
 using uint = unsigned long;
 
@@ -41,6 +40,8 @@ namespace _SparseMat
     {
     private:
         std::unique_ptr<T> _item;
+
+        /// @brief Real last-dimension index/coordinate of this item
         uint _idx;
 
     public:
@@ -50,9 +51,14 @@ namespace _SparseMat
         Item(uint idx, T &&default_value);
 
         const std::unique_ptr<T> &get_item();
+        
+        /// @brief Get real last-dimension index/coordinate of this item
+        /// @return Real index
         const uint &get_idx(); 
 
         void set_item(std::unique_ptr<T> &&item);
+
+        /// @brief Set real last-dimension index/coordinate of this item
         void set_idx(const uint& idx);
     };
 }// namespace _SparseMat
@@ -60,6 +66,7 @@ using namespace _SparseMat;
 
 /// @brief General (multitype) sparse matrix -> can overload to make numbers matrix
 /// @tparam T Matrix items' type -> eg. int
+/// @note The matrix is zero based index
 template <typename T>
 class SparseMat
 {
@@ -104,6 +111,12 @@ private:
     /// @return Last dimension from special_values
     /// @note coord won't checked (assume already checked + shape dimension>0)
     LL<Item<T>>* get_last_dim(const Coord& coord);
+    
+    /// @brief Get item from the matrix
+    /// @param coord
+    /// @return The item that has the coord
+    T &get_item(Coord& coord);
+    
 public:
     /// @brief Empty constructor
     ///SparseMat();
@@ -128,21 +141,24 @@ public:
     void set_value(Coord coord, const T &value);
     void set_value(Coord coord, T &&value);
 
-    /// @brief 
+    /// @brief Get item from the matrix
     /// @param coord 
     /// @return The item that has the coord
     const T &operator[](Coord coord);
 
-    /*
+    /// @todo
     /// @brief
     /// @param idx
     /// @return A new sparse matrix with less one dimension or if dimension is 1 return the item that has the idx
-    std::variant<SparseMat<T>,T&> operator[](uint idx);
-    */
+    //std::variant<SparseMat<T>,T&> operator[](uint idx);
 
-    /// @brief Reset the value in the coordinate to the default value
+    /// @brief Reset the value in the coordinate to the default value (if the value isn't already default value)
     /// @param coord
-    void reset_value(const Coord &coord);
+    void reset_value(Coord coord);
+
+    /// @brief inefficient print method just for debugging 
+    /// @todo efficient print method
+    void debug_print();
 
     //~SparseMat();
 };

@@ -155,7 +155,7 @@ bool SparseMat<T>::check_coord_validity(Coord &coord)
 }
 
 template <class T>
-LL<Item<T>>* SparseMat<T>::get_last_dim(const Coord &coord)
+LL<Item<T>>* SparseMat<T>::get_last_dim(const Coord& coord)
 {
     // Another solution is visitor pattern
 
@@ -168,9 +168,13 @@ LL<Item<T>>* SparseMat<T>::get_last_dim(const Coord &coord)
         break;
 
     case 2:
+    
+        //std::cout<<std::to_string(crd[0]);
+        //auto l{std::get<1>(*_special_values)};
+        //auto itm_l {l[crd[0]]};
         itm_lst = &std::get<1>(*_special_values)[crd[0]];
         break;
-
+    
     case 3:
         itm_lst = &std::get<2>(*_special_values)[crd[0]][crd[1]];
         break;
@@ -201,7 +205,7 @@ void SparseMat<T>::set_value(Coord coord, const T &value)
     LL<Item<T>> *itm_lst{get_last_dim(coord)};
 
     for (int i = 0; i < itm_lst->get_size(); i++)
-        if ((*itm_lst)[i].get_idx() == coord.get_coord()[0])
+        if ((*itm_lst)[i].get_idx() == coord.get_coord()[-1])
         {
             (*itm_lst)[i].set_item(std::make_unique<T>(value));
             break;
@@ -222,7 +226,7 @@ void SparseMat<T>::set_value(Coord coord, T &&value)
     LL<Item<T>> *itm_lst{get_last_dim(coord)};
 
     for (int i = 0; i < itm_lst->get_size(); i++)
-        if ((*itm_lst)[i].get_idx() == coord.get_coord()[0])
+        if ((*itm_lst)[i].get_idx() == coord.get_coord()[-1])
         {
             (*itm_lst)[i].set_item(std::make_unique<T>(std::move(value)));
             break;
@@ -232,7 +236,7 @@ void SparseMat<T>::set_value(Coord coord, T &&value)
 }
 
 template <class T>
-const T &SparseMat<T>::operator[](Coord coord)
+void SparseMat<T>::reset_value(Coord coord)
 {
     if (!check_coord_validity(coord))
         throw std::invalid_argument("invalid coordinates");
@@ -243,10 +247,37 @@ const T &SparseMat<T>::operator[](Coord coord)
     LL<Item<T>> *itm_lst{get_last_dim(coord)};
 
     for (int i = 0; i < itm_lst->get_size(); i++)
-        if ((*itm_lst)[i].get_idx() == coord.get_coord()[0])
+        if ((*itm_lst)[i].get_idx() == coord.get_coord()[-1])
+        {
+            ///@todo
+            ///Until add drop(delete with index) method in Vector class 
+            (*itm_lst)[i].set_item(std::make_unique<T>(*(_default_value.get())));
+            return;
+        }
+}
+
+template <class T>
+T &SparseMat<T>::get_item(Coord &coord)
+{
+    if (!check_coord_validity(coord))
+        throw std::invalid_argument("invalid coordinates");
+
+    if (_shape.get_n_dimensions() == 0)
+        throw std::invalid_argument("Empty matrix");
+
+    LL<Item<T>> *itm_lst{get_last_dim(coord)};
+
+    for (int i = 0; i < itm_lst->get_size(); i++)
+        if ((*itm_lst)[i].get_idx() == coord.get_coord()[-1])
             return *((*itm_lst)[i].get_item());
 
     return *_default_value;
+}
+
+template <class T>
+const T &SparseMat<T>::operator[](Coord coord)
+{
+    return get_item(coord);
 }
 
 template <class T>
@@ -264,21 +295,86 @@ void SparseMat<T>::specify_special_values_type()
 
     case 2:
         _special_values= std::make_unique<SPECIAL_VALUES_TYPE>(LL<LL<Item<T>>>{});
+        for (int i = 0; i < _shape.get_coord()[0]; i++)
+            std::get<1>(*_special_values).push_back(LL<Item<T>>{});
         break;
 
     case 3:
         _special_values= std::make_unique<SPECIAL_VALUES_TYPE>(LL<LL<LL<Item<T>>>>{});
+        for (int i = 0; i < _shape.get_coord()[0]; i++)
+        {
+            std::get<2>(*_special_values).push_back(LL<LL<Item<T>>>{});
+            for (int j = 0; j < _shape.get_coord()[1]; j++)
+                std::get<2>(*_special_values)[i].push_back(LL<Item<T>>{});
+        }    
         break;
 
     case 4:
         _special_values= std::make_unique<SPECIAL_VALUES_TYPE>(LL<LL<LL<LL<Item<T>>>>>{});
+        for (int i = 0; i < _shape.get_coord()[0]; i++)
+        {
+            std::get<3>(*_special_values).push_back(LL<LL<LL<Item<T>>>>{});
+            for (int j = 0; j < _shape.get_coord()[1]; j++)
+            {
+                std::get<3>(*_special_values)[i].push_back(LL<LL<Item<T>>>{});
+                for (int k = 0; k < _shape.get_coord()[2]; k++)
+                    std::get<3>(*_special_values)[i][j].push_back(LL<Item<T>>{});
+            }
+        }
         break;
 
     case 5:
+    {
         _special_values= std::make_unique<SPECIAL_VALUES_TYPE>(LL<LL<LL<LL<LL<Item<T>>>>>>{});
+        auto &sp_values { std::get<4>(*_special_values) };
+        for (int i = 0; i < _shape.get_coord()[0]; i++)
+        {
+            sp_values.push_back(LL<LL<LL<LL<Item<T>>>>>{});
+            for (int j = 0; j < _shape.get_coord()[1]; j++)
+            {
+                sp_values[i].push_back(LL<LL<LL<Item<T>>>>{});
+                for (int k = 0; k < _shape.get_coord()[2]; k++)
+                {
+                    sp_values[i][j].push_back(LL<LL<Item<T>>>{});
+                    for (int z = 0; z < _shape.get_coord()[3]; z++)
+                        sp_values[i][j][k].push_back(LL<Item<T>>{});
+                }
+            }
+        }
         break;
-
+    }
     default:
         throw std::invalid_argument("Shape dimensions > 5");
+    }
+}
+
+template <class T>
+void SparseMat<T>::debug_print() 
+{
+    std::string p_mat{""};
+    std::string dim_start_delim{"{"};
+    std::string dim_end_delim{"}\n"};
+    std::string itm_delim{"  "};
+
+    auto &crd{_shape.get_coord()};
+    
+    Coord coord{};
+
+    auto y{(*_special_values).index()};
+
+    for (int i = 0; i < _shape.get_n_dimensions(); i++)
+    {coord.get_coord().push_back(0);}
+
+    for (int i = 0; i < _shape.get_n_dimensions(); i++)
+    {
+        p_mat.append(dim_start_delim);
+        for (int j = 0; j < crd[i]; j++)
+        {
+            coord.get_coord()[i] = j;
+            auto x{get_item(coord)};
+            p_mat.append(std::to_string(x));
+            p_mat.append(itm_delim);
+        }
+        p_mat.append(dim_end_delim);
     }
 }
