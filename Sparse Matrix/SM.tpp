@@ -351,30 +351,76 @@ void SparseMat<T>::specify_special_values_type()
 template <class T>
 void SparseMat<T>::debug_print() 
 {
-    std::string p_mat{""};
+    if(!_shape.get_n_dimensions())
+        return;
+
+    std::string print_mat{""};
     std::string dim_start_delim{"{"};
-    std::string dim_end_delim{"}\n"};
-    std::string itm_delim{"  "};
+    std::string dim_end_delim{"}"};
+    std::string itm_delim{" "};
 
-    auto &crd{_shape.get_coord()};
+    int n_loops{_shape.get_n_dimensions()}; // number of nested for loops
+
+    int loops_idx[n_loops]; // like i,j,k but in an array
+    for (int i = 0; i < n_loops; i++)
+        loops_idx[i] = 0;
+
+    int max_idx[n_loops]; // like in for(; i < counter ;), but the counters in an array
+    for (int i = 0; i < n_loops; i++)
+        max_idx[i]= _shape.get_coord()[i];
     
-    Coord coord{};
 
-    auto y{(*_special_values).index()};
+    bool is_finished = false;
 
-    for (int i = 0; i < _shape.get_n_dimensions(); i++)
-    {coord.get_coord().push_back(0);}
-
-    for (int i = 0; i < _shape.get_n_dimensions(); i++)
+    for (int i = 1; i < n_loops; i++)
+        print_mat.append(dim_start_delim);
+    print_mat.append("\n");
+    //print_mat.append(dim_start_delim);
+    while (!is_finished)
     {
-        p_mat.append(dim_start_delim);
-        for (int j = 0; j < crd[i]; j++)
+        for (; loops_idx[0] < max_idx[0]; loops_idx[0]++)
         {
-            coord.get_coord()[i] = j;
-            auto x{get_item(coord)};
-            p_mat.append(std::to_string(x));
-            p_mat.append(itm_delim);
+            Coord crd;
+            for (int i = 0; i < n_loops; i++)
+                crd.get_coord().push_back(loops_idx[i]);
+            
+            print_mat.append(std::to_string(get_item(crd)));
+            print_mat.append(itm_delim);
         }
-        p_mat.append(dim_end_delim);
+        print_mat.pop_back();
+        print_mat.append("\n");
+        // print_mat.append(dim_end_delim);
+        --loops_idx[0]; // to cancel last increment
+        // Here it will increment the last loop_idx which isn't equal to max_idx[i]-1
+        // eg. after first above for loop loops_idx will be (max-1, 0, 0)
+        // So it will be after this loop (0, 1, 0) and start from the beginning...
+        for (int i = 0; i < n_loops + 1; i++) //+1 to know if all loops are finished
+        {
+            if (i == n_loops)
+            {is_finished = true; break;}
+
+            if (loops_idx[i] == max_idx[i] - 1)
+                continue;
+
+            for (int j = 1; j < i; j++)
+                print_mat.append(dim_end_delim);
+            // print_mat.pop_back();
+            for (int j = 1; j < i; j++)
+                print_mat.append(dim_start_delim);
+            if (i>1)
+                print_mat.append("\n");
+            
+            //print_mat.append(dim_start_delim);
+            ++loops_idx[i];
+            for (int j = 0; j < i; j++) // make any previous loop = 0
+                loops_idx[j] = 0;
+
+            break;
+        }
     }
+    //print_mat.pop_back();
+    for (int i = 1; i < n_loops; i++)
+        print_mat.append(dim_end_delim);
+
+    std::cout<<print_mat;
 }

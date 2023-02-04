@@ -128,7 +128,7 @@ public:
     SparseMat(SparseMat<T> &&mat);
 
     /// @brief Constructor
-    /// @param shape The shape of the matrix
+    /// @param shape The shape of the matrix up to 5D
     /// @param default_value Default (Filled) value
     SparseMat(const Coord &shape, const T &default_value);
     SparseMat(const Coord &shape, T &&default_value);

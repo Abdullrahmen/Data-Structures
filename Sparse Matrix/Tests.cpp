@@ -30,9 +30,10 @@ void test1()
     {
         assert(std::string(e.what()) == "Shape dimensions > 5");
     }
+    std::cout<<"Test1 passed"<<"\n";
 }
 
-/// @brief Test multidimension constructors
+/// @brief Test multidimensional constructors
 void test2()
 {
     auto d{1};
@@ -41,14 +42,14 @@ void test2()
     SparseMat<int> mat3{{5, 3, 2}, d};
     SparseMat<int> mat4{{5, 1, 4, 3}, 3};
     SparseMat<int> mat5{{5, 1, 4, 3, 2}, d};
+    std::cout<<"Test2 passed"<<"\n";
 }
 
 /// @brief set_value, get_value, reset_value
 void test3()
 {
-    SparseMat<int> mat{{5 ,3}, -1};
-    //mat.debug_print();
-    
+    SparseMat<int> mat{{5, 3}, -1};
+
     try
     {
         mat.set_value({3}, 1);
@@ -83,4 +84,51 @@ void test3()
     {
         assert(std::string(e.what()) == "invalid coordinates");
     }
+    std::cout<<"Test3 passed"<<"\n";
+}
+
+/// @brief Test debug_print
+void test4()
+{
+    std::cout << "1D Matrix";
+
+    SparseMat<int> mat{{5}, 0};
+    mat.set_value({2},3);
+    mat.debug_print();
+
+    std::cout << "\n"
+              << "2D Matrix\n";
+
+    SparseMat<int> mat2{{5,3}, 0};
+    mat2.set_value({0, 0}, 1);
+    mat2.set_value({-1, -1}, -1);
+    mat2.debug_print();
+
+    std::cout << "\n"
+              << "\n"
+              << "3D Matrix\n";
+
+    SparseMat<int> mat3{{3, 3, 2}, 0};
+    mat3.set_value({0, 0, 0}, 1);
+    mat3.set_value({0, -1, -1}, -1);
+    mat3.debug_print();
+
+    std::cout << "\n"
+              << "\n"
+              << "4D Matrix\n";
+
+    SparseMat<int> mat4{{2, 2, 2, 2}, 0};
+    mat4.set_value({0, 0, 0, 1}, 1);
+    mat4.set_value({-1, -1, 0, 0}, -1);
+    mat4.debug_print();
+
+    std::cout << "\n"
+              << "\n"
+              << "5D Matrix\n";
+
+    SparseMat<int> mat5{{2, 2, 2, 2, 2}, 0};
+    mat5.set_value({0, 0, 0, 1, 0}, 1);
+    mat5.set_value({-1, -1, 0, 0, 1}, -1);
+    mat5.debug_print();
+    std::cout<<"Test4 passed"<<"\n";
 }
