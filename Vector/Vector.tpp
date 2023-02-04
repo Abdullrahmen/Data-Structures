@@ -119,9 +119,18 @@ template<typename T> void Vector<T>::push_back(T && value)
         expand_capacity(_size+1);
     
     ++_size;
-    _vec[_size-1]= value;
+    _vec[_size-1]= std::move(value);
 }
-template<typename T> void Vector<T>::push_back(std::initializer_list<T>&& lst)
+template <typename T>
+void Vector<T>::push_back(const T &value)
+{
+    if (_size + 1 > _capacity_size)
+        expand_capacity(_size + 1);
+
+    ++_size;
+    _vec[_size - 1] = value;
+}
+template<typename T> void Vector<T>::push_back(const std::initializer_list<T>& lst)
 {
     if(_size + lst.size() > _capacity_size)
         expand_capacity(_size + lst.size());
@@ -173,7 +182,7 @@ template<typename T> const T& Vector<T>::operator[] (long long n) const
 
 template<typename T> void Vector<T>::debug_print() const
 {
-    std::cout<<"\n"<<_capacity_size<<"\n"<<_size<<"\n";
+    //std::cout<<"\n"<<_capacity_size<<"\n"<<_size<<"\n";
     for (uint i = 0; i < _size; i++)
     {
         std::cout<<_vec[i];

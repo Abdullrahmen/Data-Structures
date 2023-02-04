@@ -54,8 +54,9 @@ public:
     /// @note Eg. v.push_back(false) -> Add false at the end of the vector.
     /// @note Eg. v.push_back({true, true, false}) -> Add 3 elements (true, true, false) at the end of the vector.
     /// @note Eg. v.push_back(50, false) -> Add 50 elements filled with false.
-    void push_back(T && value);
-    void push_back(std::initializer_list<T>&& lst);
+    void push_back(T &&value);
+    void push_back(const T &value);
+    void push_back(const std::initializer_list<T> &lst);
     void push_back(uint n, T && value);
 
     /// @todo 

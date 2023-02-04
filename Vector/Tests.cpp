@@ -79,7 +79,8 @@ void test4()
     assert(v.get_capacity_size() == 8);
 
     v.push_back({7,8});
-    v.push_back(9);
+    auto x{9};
+    v.push_back(x);
     assert(v.get_capacity_size() == 11);
 
     v.push_back(50, -1);
