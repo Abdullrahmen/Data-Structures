@@ -9,11 +9,11 @@ Linked list based stack
 #include <memory>
 #include "../Linked List/Singly LL.h"
 using uint = unsigned long;
-using namespace _SinglyLL; //Singly linked list Node
+using namespace _SinglyLL; // Singly linked list Node
 
 /// @brief Stack based on linked list.
 /// @tparam T
-template<typename T>
+template <typename T>
 class Stack
 {
 private:
@@ -30,6 +30,7 @@ private:
 
     /// @brief The size of the stack
     uint _size;
+
 public:
     /// @brief Empty constructor
     Stack();
@@ -49,10 +50,10 @@ public:
 
     /// @brief Add value to the end of the stack
     /// @param value
-    void push_back(const T& value);
-    void push_back(T&& value);
+    void push_back(const T &value);
+    void push_back(T &&value);
 
-    void debug_print(std::string delim = "\t") const;
+    void debug_print(std::string delim = "  ") const;
 
     //~Stack();
 };
