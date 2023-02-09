@@ -63,9 +63,9 @@ public:
     /// @brief Initializer list constructor
     DoublyLinkedList(std::initializer_list<T> &&lst);
 
-    /// @brief Add elements at the end of the list
-    /// @note Eg. lst.push_back(false) -> Add false at the end of the list.
-    /// @note Eg. lst.push_back({true, true, false}) -> Add 3 elements (true, true, false) at the end of the list.
+    /// @brief Add elements to the end of the list
+    /// @note Eg. lst.push_back(false) -> Add false to the end of the list.
+    /// @note Eg. lst.push_back({true, true, false}) -> Add 3 elements (true, true, false) to the end of the list.
     /// @note Eg. lst.push_back(50, false) -> Add 50 elements filled with false.
     void push_back(const T &value);
     void push_back(T &&value);

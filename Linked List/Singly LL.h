@@ -59,7 +59,7 @@ public:
     /// @brief Initializer list constructor
     SinglyLinkedList(std::initializer_list<T>&& lst);
 
-    /// @brief Add elements at the end of the list 
+    /// @brief Add elements to the end of the list 
     /// @note Eg. lst.push_back(false) -> Add false at the end of the list.
     /// @note Eg. lst.push_back({true, true, false}) -> Add 3 elements (true, true, false) at the end of the list.
     /// @note Eg. lst.push_back(50, false) -> Add 50 elements filled with false.
