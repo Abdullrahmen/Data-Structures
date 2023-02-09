@@ -11,16 +11,50 @@ Linked list based stack
 using uint = unsigned long;
 using namespace _SinglyLL; //Singly linked list Node
 
+/// @brief Stack based on linked list.
+/// @tparam T
 template<typename T>
 class Stack
 {
 private:
-    std::unique_ptr<Node<T>> _head;
+    /*
+    -- Stack doesn't contain any head pointer --
+    ex.
+    node <- node <- node <- node <- node
+                                     |
+                                    tail
+    */
+
+    /// @brief The tail of the stack
+    std::unique_ptr<Node<T>> _tail;
+
+    /// @brief The size of the stack
     uint _size;
-    
 public:
+    /// @brief Empty constructor
     Stack();
-    ~Stack();
+
+    /// @brief Copy constructor
+    Stack(const Stack &stack);
+
+    /// @brief Move constructor
+    Stack(Stack &&stack);
+
+    /// @brief Clear the stack
+    void clear();
+
+    /// @brief pop last item of the stack
+    /// @return A unique pointer to the last item or nullptr if the stack is empty
+    std::unique_ptr<T> drop_back();
+
+    /// @brief Add value to the end of the stack
+    /// @param value
+    void push_back(const T& value);
+    void push_back(T&& value);
+
+    void debug_print(std::string delim = "\t") const;
+
+    //~Stack();
 };
 
 #include "Stack.tpp"
