@@ -59,10 +59,11 @@ public:
     /// @brief Initializer list constructor
     SinglyLinkedList(std::initializer_list<T>&& lst);
 
-    /// @brief Add elements to the end of the list 
-    /// @note Eg. lst.push_back(false) -> Add false at the end of the list.
-    /// @note Eg. lst.push_back({true, true, false}) -> Add 3 elements (true, true, false) at the end of the list.
-    /// @note Eg. lst.push_back(50, false) -> Add 50 elements filled with false.
+    /// @brief Add elements to the end of the list
+    /// @example lst.push_back(false) -> Add false at the end of the list.
+    /// @example lst.push_back({true, true, false}) -> Add 3 elements (true, true, false) at the end of the list.
+    /// @example lst.push_back(50, false) -> Add 50 elements filled with false.
+    /// @note O(1)
     void push_back(const T &value);
     void push_back(T &&value);
     void push_back(std::initializer_list<T> &&lst);
@@ -75,11 +76,13 @@ public:
     /// @brief Drop last n items from the list
     /// @param n drop last n items
     /// @note If n >= list size -> will delete all items in the list.
+    /// @brief O(1)
     void drop_back(uint n=1);
     ///@todo
     T& drop(uint n);
 
-    T& operator[] (long long n);
+    /// @note O(n)
+    T &operator[](long long n);
     ///@todo
     void operator=(SinglyLinkedList<T> &lst);
     void operator=(SinglyLinkedList<T> &&lst);
@@ -93,6 +96,7 @@ public:
     uint search();
 
     ~SinglyLinkedList();
+    /// @
 };
 
 #include "Singly LL.tpp"

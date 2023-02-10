@@ -50,10 +50,11 @@ public:
     T& drop(uint idx);
     uint find_transposition(T && value);
 
-    /// @brief Add elements to the end of the vector 
-    /// @note Eg. v.push_back(false) -> Add false to the end of the vector.
-    /// @note Eg. v.push_back({true, true, false}) -> Add 3 elements (true, true, false) to the end of the vector.
-    /// @note Eg. v.push_back(50, false) -> Add 50 elements filled with false.
+    /// @brief Add elements to the end of the vector
+    /// @example Eg. v.push_back(false) -> Add false to the end of the vector.
+    /// @example Eg. v.push_back({true, true, false}) -> Add 3 elements (true, true, false) to the end of the vector.
+    /// @example Eg. v.push_back(50, false) -> Add 50 elements filled with false.
+    /// @note O(1) but when the capacity expands O(n) so in the worst case O(n)
     void push_back(T &&value);
     void push_back(const T &value);
     void push_back(const std::initializer_list<T> &lst);
@@ -65,11 +66,13 @@ public:
     void operator=(Vector<T> & vec);
     void operator=(Vector<T> && vec);
 
-    /// @brief Remove last n items from the vector -Warning this won't reassign or delete the values except if the capacity rescaled 
+    /// @brief Remove last n items from the vector -Warning this won't reassign or delete the values except if the capacity rescaled
     /// @param n drop last n items, If n >= vector size -> will delete all items in the vector.
     /// @param rescale_capacity Rescale capacity if the capacity method conditions applied
+    /// @note if rescale_capacity then in the worst case O(n) otherwise O(1)
     void drop_back(uint n=1, bool rescale_capacity= true);
 
+    /// @note O(1)
     T &operator[](long long n);
     const T &operator[](long long n) const;
 
@@ -81,21 +84,25 @@ public:
     /// @brief First capacity size
     const uint get_minimal_capacity_size() const;
     /// @param minimal_capacity_size Minimal capacity size
+    /// @note O(n)
     void set_minimal_capacity_size(uint minimal_capacity_size);
 
     /// @brief capacity_method Expand the capacity method
     const CAPACITY_METHOD get_capacity_method() const;
     /// @param capacity_method Expand the capacity method
+    /// @note O(n)
     void set_capacity_method(CAPACITY_METHOD method);
 
     /// @brief Expand the capacity with multiplication factor * -> Needed capacity_method == MULTIPLICATION
     const double get_multiplication_factor() const;
     /// @param multiplication_factor Expand the capacity with multiplication factor * -> Needed capacity_method == MULTIPLICATION
+    /// @note O(n)
     void set_multiplication_factor(double factor);
-    
+
     /// @brief Expand the capacity with sum factor * -> Needed capacity_method == SUM
     const uint get_sum_factor() const;
     /// @param sum_factor Expand the capacity with sum factor * -> Needed capacity_method == SUM
+    /// @note O(n)
     void set_sum_factor(uint factor);
 
     ~Vector();

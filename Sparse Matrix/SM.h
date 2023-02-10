@@ -136,14 +136,16 @@ public:
     // Deprecated -> changed to reset_value method
     /*@note If value is a nullptr then the value in the coordinate will reset to the default value*/
     /// @brief Set a value to a specific coordinates.
-    /// @param coord 
-    /// @param value 
+    /// @param coord
+    /// @param value
+    /// @note O(1)
     void set_value(Coord coord, const T &value);
     void set_value(Coord coord, T &&value);
 
     /// @brief Get item from the matrix
-    /// @param coord 
+    /// @param coord
     /// @return The item that has the coord
+    /// @note O(n) where n is the number of the special values in this dimension
     const T &operator[](Coord coord);
 
     /// @todo
@@ -154,10 +156,12 @@ public:
 
     /// @brief Reset the value in the coordinate to the default value (if the value isn't already default value)
     /// @param coord
+    /// @note O(n) where n is the number of the special values in this dimension
     void reset_value(Coord coord);
 
-    /// @brief inefficient print method just for debugging 
+    /// @brief inefficient print method just for debugging
     /// @todo efficient print method
+    /// @note O(n) where n is the number of the values in the matrix
     void debug_print();
 
     //~SparseMat();

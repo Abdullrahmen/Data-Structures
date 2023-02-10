@@ -46,10 +46,12 @@ public:
 
     /// @brief pop last item of the stack
     /// @return A unique pointer to the last item or nullptr if the stack is empty
+    /// @note O(1)
     std::unique_ptr<T> drop_back();
 
     /// @brief Add value to the end of the stack
     /// @param value
+    /// @note O(1)
     void push_back(const T &value);
     void push_back(T &&value);
 
