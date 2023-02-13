@@ -15,7 +15,7 @@ class Queue
 {
 private:
     /// @brief Queue data(values) 
-    ///unique_ptr to array of unique_ptrs -not a direct array- to allow late specify size(after declaration)
+    ///unique_ptr to an array of unique_ptrs -not a direct array- to allow late specify size(after declaration)
     std::unique_ptr<std::unique_ptr<T>[]> _values;
 
     /// @brief Maximum size (_values array size)
