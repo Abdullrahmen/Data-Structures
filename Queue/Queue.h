@@ -39,7 +39,7 @@ private:
 
 public:
     /// @brief Empty constructor
-    Queue(uint size = 0);
+    Queue(uint maximum_size = 0);
 
     /// @brief Copy constructor
     Queue(const Queue &queue);
@@ -53,7 +53,7 @@ public:
     void set_maximum_size(const uint &maximum_size);
 
     /// @todo
-    void reset_maximum_size();
+    //void reset_maximum_size();
 
     /// @brief Add element to the end of the queue
     /// @param value The element
@@ -65,11 +65,13 @@ public:
     bool is_full() const { return _actual_size == _maximum_size; }
 
     /// @brief return first element in the queue and pop it 
-    /// @return First element in the queue
+    /// @return A unique pointer to the first element in the queue
     /// @note O(1)
     std::unique_ptr<T> dequeue();
 
-    ~Queue();
+    void debug_print();
+
+    //~Queue();
 };
 
 #include "Queue.tpp"
