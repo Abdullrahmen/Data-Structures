@@ -37,7 +37,7 @@ _vec(std::move(vec._vec))
     vec._vec= nullptr;
 }
 
-template<typename T> Vector<T>::Vector(std::initializer_list<T>&& lst):
+template<typename T> Vector<T>::Vector(std::initializer_list<T> lst):
 _minimal_capacity_size(DEFAULT_MINIMAL_CAPACITY_SIZE),
 _capacity_method(DEFAULT_CAPACITY_METHOD),
 _multiplication_factor(DEFAULT_MULTIPLICATION_FACTOR),
@@ -130,7 +130,7 @@ void Vector<T>::push_back(const T &value)
     ++_size;
     _vec[_size - 1] = value;
 }
-template<typename T> void Vector<T>::push_back(const std::initializer_list<T>& lst)
+template<typename T> void Vector<T>::push_back(std::initializer_list<T> lst)
 {
     if(_size + lst.size() > _capacity_size)
         expand_capacity(_size + lst.size());

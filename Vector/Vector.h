@@ -42,7 +42,7 @@ public:
     Vector(Vector&& vec);
 
     /// @brief Initializer list constructor
-    Vector(std::initializer_list<T>&& lst);
+    Vector(std::initializer_list<T> lst);
 
     /// @todo
     void right_rotate(int times);
@@ -57,7 +57,7 @@ public:
     /// @note O(1) but when the capacity expands O(n) so in the worst case O(n)
     void push_back(T &&value);
     void push_back(const T &value);
-    void push_back(const std::initializer_list<T> &lst);
+    void push_back(std::initializer_list<T> lst);
     void push_back(uint n, T && value);
 
     /// @todo 
