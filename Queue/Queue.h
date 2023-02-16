@@ -67,7 +67,7 @@ public:
     /// @brief return first element in the queue and pop it 
     /// @return A unique pointer to the first element in the queue
     /// @note O(1)
-    std::unique_ptr<T> dequeue();
+    [[nodiscard]] std::unique_ptr<T> dequeue();
 
     void debug_print();
 

@@ -8,13 +8,14 @@ using uint = unsigned long;
 
 namespace _DoublyLL
 {
-    template<typename T>
+    template <typename T>
     class Node
     {
     private:
         std::unique_ptr<Node<T>> _next;
         std::unique_ptr<T> _value;
-        Node<T>* _previous;
+        Node<T> *_previous;
+
     public:
         /// @brief Empty constructor
         Node();
@@ -29,28 +30,29 @@ namespace _DoublyLL
         /// @brief Move constructor
         Node(Node &&node);
 
-        std::unique_ptr<T>& value();
-        std::unique_ptr<Node<T>>& next();
-        Node<T>*& previous();
+        [[nodiscard]] std::unique_ptr<T> &value();
+        [[nodiscard]] std::unique_ptr<Node<T>> &next();
+        Node<T> *&previous();
     };
 }
 
-template<typename T>
+template <typename T>
 class DoublyLinkedList
 {
 private:
     std::unique_ptr<_DoublyLL::Node<T>> _head;
-    _DoublyLL::Node<T>* _tail;
+    _DoublyLL::Node<T> *_tail;
     uint _size;
 
     /// @brief If _head is empty, will initialize it with value without increase _size
     void initialize_head_tail(T &&value);
     void initialize_head_tail(const T &value);
 
-    _DoublyLL::Node<T>* get_node(long long n);
+    [[nodiscard]] _DoublyLL::Node<T> *get_node(long long n);
+
 public:
     uint _debug_get_node_counter_{0};
-    
+
     /// @brief Empty constructor
     DoublyLinkedList();
 
@@ -90,6 +92,5 @@ public:
     ~DoublyLinkedList();
 };
 
-
 #include "Doubly LL.tpp"
-#endif //DOUBLY_LL_H_
+#endif // DOUBLY_LL_H_
