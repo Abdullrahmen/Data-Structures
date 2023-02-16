@@ -51,10 +51,10 @@ namespace _SparseMat
         Item(uint idx, T &&default_value);
 
         const std::unique_ptr<T> &get_item();
-        
+
         /// @brief Get real last-dimension index/coordinate of this item
         /// @return Real index
-        const uint &get_idx(); 
+        const uint &get_idx();
 
         void set_item(std::unique_ptr<T> &&item);
 
@@ -86,6 +86,9 @@ private:
     5D -> LL<LL<LL<LL<LL<Item<T>>>>>>*
     Another solution: use a pointer to void then cast it in the constructor after the dimension specified
     */
+    ///@todo
+    ///@todo Another solution: add LL member in Item class -> better (future version)
+    ///@todo
     #define SPECIAL_VALUES_TYPE std::variant<LL<Item<T>>,\
                                              LL<LL<Item<T>>>,\
                                              LL<LL<LL<Item<T>>>>,\
@@ -110,13 +113,15 @@ private:
     /// @param coord full coordinate
     /// @return Last dimension from special_values
     /// @note coord won't checked (assume already checked + shape dimension>0)
-    LL<Item<T>>* get_last_dim(const Coord& coord);
-    
+    /// @note O(1)
+    LL<Item<T>> *get_last_dim(const Coord &coord);
+
     /// @brief Get item from the matrix
     /// @param coord
     /// @return The item that has the coord
-    T &get_item(Coord& coord);
-    
+    /// @note O(n) where n is the number of the special values in this dimension
+    [[nodiscard]] T &get_item(Coord &coord);
+
 public:
     /// @brief Empty constructor
     ///SparseMat();
@@ -159,8 +164,8 @@ public:
     /// @note O(n) where n is the number of the special values in this dimension
     void reset_value(Coord coord);
 
-    /// @brief inefficient print method just for debugging
     /// @todo efficient print method
+    /// @brief inefficient print method just for debugging
     /// @note O(n) where n is the number of the values in the matrix
     void debug_print();
 
