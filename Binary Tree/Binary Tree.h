@@ -14,15 +14,26 @@ class BinaryTree
 private:
     struct Node
     {
-        std::unique_ptr<T> _data;
+        std::unique_ptr<T> _value;
         std::unique_ptr<Node> _left;
         std::unique_ptr<Node> _right;
+        Node();
+        Node(const T &value);
+        Node(T &&value);
+        Node(const Node& node);
+        Node(Node&& node);
     };
     /// @brief Root node
     std::unique_ptr<Node> _root;
-    
+
     /// @brief The binary tree level
     int _level;
+
+    /// @brief Get node from node path
+    /// @param node_path eg. {'L', 'R', 'L'}
+    /// @return The node pointer or nullptr if false 
+    /// @note Any missing node in the way of the path will be created with null value
+    [[nodiscard]] Node* get_node_from_path(std::initializer_list<char> node_path);
 
 public:
     /// @brief Empty constructor
@@ -38,6 +49,7 @@ public:
     /// @param value_path The value path in the binary tree eg. {'L', 'R', 'L'} where 'L' is left and 'R' is right
     /// @param value The value added in the value_path
     /// @return true if successfully added
+    /// @note Parent node isn't required
     bool add(std::initializer_list<char> value_path, const T &value);
     bool add(std::initializer_list<char> value_path, T &&value);
 
@@ -52,7 +64,7 @@ public:
     /// @brief Convert the binary tree to pre-order string, require T ability to convert to std::string
     /// @param type_converter_func optional, if it's null then will cast by static_cast< std::string >
     /// @return Pre-order string if succeed  or empty string
-    std::string to_preorder_string(std::string (*type_converter_func)(const T &) = nullptr);
+    [[nodiscard]] std::string to_preorder_string(std::string (*type_converter_func)(const T &) = nullptr);
 };
 
 #include "Binary Tree.tpp"
