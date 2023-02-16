@@ -31,9 +31,13 @@ private:
 
     /// @brief Get node from node path
     /// @param node_path eg. {'L', 'R', 'L'}
-    /// @return The node pointer or nullptr if false 
-    /// @note Any missing node in the way of the path will be created with null value
-    [[nodiscard]] Node* get_node_from_path(std::initializer_list<char> node_path);
+    /// @return The unique pointer that has the ownership of the node or nullptr if false 
+    /// @note Any missing node in the way of the path will be created with null value node
+    [[nodiscard]] std::unique_ptr<Node>& get_node_from_path(std::initializer_list<char> node_path);
+
+    void _to_preorder_string(std::string (*type_converter_func)(const T &),
+                             std::string &append_in_str, const Node *const node,
+                             const std::string &null_nodes_string);
 
 public:
     /// @brief Empty constructor
@@ -63,8 +67,9 @@ public:
 
     /// @brief Convert the binary tree to pre-order string, require T ability to convert to std::string
     /// @param type_converter_func optional, if it's null then will cast by static_cast< std::string >
+    /// @param null_nodes_string null nodes representation eg. "NULL NODES"
     /// @return Pre-order string if succeed  or empty string
-    [[nodiscard]] std::string to_preorder_string(std::string (*type_converter_func)(const T &) = nullptr);
+    [[nodiscard]] std::string to_preorder_string(std::string (*type_converter_func)(const T &) = nullptr, const std::string& null_nodes_string = "NULL NODES");
 };
 
 #include "Binary Tree.tpp"
