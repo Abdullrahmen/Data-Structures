@@ -74,6 +74,9 @@ public:
     [[nodiscard]] std::string to_preorder_string(std::string (*type_converter_func)(const T &) = nullptr,
                                                  const std::string &null_nodes_string = "NULL NODES",
                                                  const std::string &delim = " ");
+
+    /// @todo
+    //Vector<T> to_preorder_vector
 };
 
 #include "Binary Tree.tpp"
