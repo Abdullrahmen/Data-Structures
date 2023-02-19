@@ -7,7 +7,7 @@ void test1()
     SparseMat<int> mat{{5, 5}, 0};
 
     auto d{1};
-    SparseMat<int> &&mat2{{3, 3}, d};
+    SparseMat<int> mat2{{3, 3, 3}, d};
 
     SparseMat<int> mat3{mat2};
 

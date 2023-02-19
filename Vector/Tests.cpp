@@ -53,7 +53,7 @@ void test2()
 /// @brief Test move, copy constructors
 void test3()
 {
-    Vector<bool>&& v{Vector<bool>{false,true,false}};
+    Vector<bool> v{Vector<bool>{false,true,false}};
     v.push_back(false);
     Vector<bool> v2{std::move(v)};
     assert(v.get_capacity_size()==0);

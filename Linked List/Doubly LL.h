@@ -83,7 +83,7 @@ public:
     void drop_back(uint n = 1);
 
     /// @note O(n)
-    T &operator[](long long n);
+    [[nodiscard]] T &operator[](long long n);
 
     void debug_print() const;
 

@@ -19,6 +19,5 @@ void test1()
     q2.debug_print();
 
     std::cout << "\n\n";
-    Queue<int> &&q3{5};
-    Queue<int> q4{std::move(q3)};
+    Queue<int> q3{std::move(q2)};
 }

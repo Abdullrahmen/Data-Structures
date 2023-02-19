@@ -26,11 +26,11 @@ void test1()
     preorder = binary_tree2.to_preorder_string(int2str, "-1", " ");
     assert(std::string("1 2 3 -1 -1 -1 -1") == preorder);
 
-    BinaryTree<int> &&binary_tree3{};
+    BinaryTree<int> binary_tree3{};
+    binary_tree3.add({}, 1);
+    binary_tree3.add({'L'}, 2);
+    binary_tree3.add({'L', 'R'}, 3);
     BinaryTree<int> binary_tree4{std::move(binary_tree3)};
-    binary_tree4.add({}, 1);
-    binary_tree4.add({'L'}, 2);
-    binary_tree4.add({'L', 'R'}, 3);
     preorder = binary_tree4.to_preorder_string(int2str, "-1", " ");
     assert(std::string("1 2 -1 3 -1 -1 -1") == preorder);
 

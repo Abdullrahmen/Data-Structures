@@ -6,7 +6,7 @@
 void s_test1()
 {
     // Initializer list constructor
-    SinglyLinkedList<int> &&lst{1, 2, 3, 4, 5, 6, 7};
+    SinglyLinkedList<int> lst{1, 2, 3, 4, 5, 6, 7};
     lst.push_back(8);
 
     // Move constructor
@@ -88,7 +88,7 @@ void s_test3()
 void d_test1()
 {
     // Initializer list constructor
-    DoublyLinkedList<int> &&lst{1, 2, 3, 4, 5, 6, 7};
+    DoublyLinkedList<int> lst{1, 2, 3, 4, 5, 6, 7};
     lst.push_back(8);
 
     // Move constructor

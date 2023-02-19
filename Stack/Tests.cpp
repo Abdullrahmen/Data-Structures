@@ -12,14 +12,13 @@ void test1()
     Stack<int> stack2{stack1};
     stack2.push_back(4);
 
-    Stack<int> &&stack3{};
-    Stack<int> stack4{std::move(stack3)};
+    Stack<int> stack3{std::move(stack2)};
 
     std::cout << "First stack: ";
     stack1.debug_print();
 
     std::cout << "\nSecond stack: ";
-    stack2.debug_print();
+    stack3.debug_print();
 
     std::cout << "\nTest1 Finished\n";
 }

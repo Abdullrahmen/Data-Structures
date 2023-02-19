@@ -81,10 +81,10 @@ public:
     /// @brief O(1)
     void drop_back(uint n = 1);
     ///@todo
-    T &drop(uint n);
+    [[nodiscard]] T &drop(uint n);
 
     /// @note O(n)
-    T &operator[](long long n);
+    [[nodiscard]] T &operator[](long long n);
     ///@todo
     void operator=(SinglyLinkedList<T> &lst);
     void operator=(SinglyLinkedList<T> &&lst);
@@ -95,7 +95,7 @@ public:
 
     ///@todo
     void insert();
-    uint search();
+    [[nodiscard]] uint search();
 
     ~SinglyLinkedList();
     /// @
