@@ -54,9 +54,14 @@ public:
     /// @param value_path The value path in the binary tree eg. {'L', 'R', 'L'} where 'L' is left and 'R' is right
     /// @param value The value added in the value_path
     /// @return true if successfully added
-    /// @note Parent node isn't required
+    /// @note Parent node isn't required (any missing parents will be created with null value)
     void add(std::initializer_list<char> value_path, const T &value);
     void add(std::initializer_list<char> value_path, T &&value);
+    /// @todo
+    // void add(const Vector<char> &value_path, const T &value);
+    // void add(Vector<char> &&value_path, const T &value);
+    // void add(const Vector<char> &value_path, T &&value);
+    // void add(Vector<char> &&value_path, T &&value);
 
     /// @brief Remove a value in the binary tree
     /// @param value_path The value path in the binary tree eg. {'L', 'R', 'L'} where 'L' is left and 'R' is right
@@ -76,7 +81,9 @@ public:
                                                  const std::string &delim = " ");
 
     /// @todo
-    //Vector<T> to_preorder_vector
+    // std::unique_ptr<Vector<T>> to_preorder_vector();
+    //[[nodiscard]] T* operator[](const Vector &value_path);
+    //[[nodiscard]] T* operator[](Vector &&value_path);
 };
 
 #include "Binary Tree.tpp"

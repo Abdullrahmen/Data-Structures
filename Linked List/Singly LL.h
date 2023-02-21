@@ -81,12 +81,13 @@ public:
     /// @brief O(1)
     void drop_back(uint n = 1);
     ///@todo
-    [[nodiscard]] T &drop(uint n);
+    /// Get the ownership of the value in the nth index
+    [[nodiscard]] std::unique_ptr<T> get(uint n);
 
     /// @note O(n)
     [[nodiscard]] T &operator[](long long n);
     ///@todo
-    void operator=(SinglyLinkedList<T> &lst);
+    void operator=(const SinglyLinkedList<T> &lst);
     void operator=(SinglyLinkedList<T> &&lst);
 
     void debug_print() const;
