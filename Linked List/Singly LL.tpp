@@ -168,19 +168,6 @@ template<typename T> void SinglyLinkedList<T>::push_back(std::initializer_list<T
         _size+= lst.size();
     }
 }
-template<typename T> void SinglyLinkedList<T>::push_back(uint n, T && value)
-{
-    if(n==0)
-        return;
-
-    push_back(std::move(value)); //to initialize _head and _tail if they didn't.
-    for (int i = 1; i < n; i++)
-    {
-        _tail->next()= std::make_unique<_SinglyLL::Node<T>>(_SinglyLL::Node<T>{std::move(value)});
-        _tail= _tail->next().get();
-    }
-    _size+= n-1; //-1 because push_back above already increase _size by 1 
-}
 template<typename T> void SinglyLinkedList<T>::push_back(uint n, const T & value)
 {
     if(n==0)

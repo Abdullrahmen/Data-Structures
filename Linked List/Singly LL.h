@@ -1,3 +1,7 @@
+/*
+Todo:
+make an interface of all linked lists types
+*/
 #ifndef SINGLY_LL_H_
 #define SINGLY_LL_H_
 
@@ -69,7 +73,6 @@ public:
     void push_back(const T &value);
     void push_back(T &&value);
     void push_back(std::initializer_list<T> &&lst);
-    void push_back(uint n, T &&value);
     void push_back(uint n, const T &value);
     ///@todo
     void push_back(const SinglyLinkedList<T> &lst);

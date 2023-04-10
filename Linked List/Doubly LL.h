@@ -73,7 +73,6 @@ public:
     void push_back(const T &value);
     void push_back(T &&value);
     void push_back(std::initializer_list<T> &&lst);
-    void push_back(uint n, T &&value);
     void push_back(uint n, const T &value);
 
     /// @brief Drop last n items from the list

@@ -207,28 +207,6 @@ template<typename T> void DoublyLinkedList<T>::push_back(std::initializer_list<T
         _tail->previous()= tmp_previous;
     }
 }
-template<typename T> void DoublyLinkedList<T>::push_back(uint n, T &&value)
-{
-    if(!n)
-        return;
-
-    auto tmp_size= _size + n;
-
-    if(!_size)
-    {
-        initialize_head_tail(std::move(value));
-        ++_size;
-    }
-
-    _DoublyLL::Node<T> *tmp_previous{nullptr};
-    for (; _size < tmp_size; ++_size)
-    {
-        _tail->next()= std::make_unique<_DoublyLL::Node<T>>(std::move(value));
-        tmp_previous= _tail;
-        _tail= _tail->next().get();
-        _tail->previous()= tmp_previous;
-    }
-}
 template<typename T> void DoublyLinkedList<T>::push_back(uint n, const T &value)
 {
     if(!n)
