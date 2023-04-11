@@ -50,6 +50,8 @@ public:
     /// @brief Move constructor
     BinaryTree(BinaryTree &&binary_tree);
 
+    /// @todo From pre-order in-order post-order vectors constructors
+
     /// @brief Add a value to the binary tree
     /// @param value_path The value path in the binary tree eg. {'L', 'R', 'L'} where 'L' is left and 'R' is right
     /// @param value The value added in the value_path
