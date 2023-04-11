@@ -7,11 +7,10 @@ with auto rebalance option
 
 #include <iostream>
 #include <memory>
-#include "../Vector/Vector.h" // from and to preorder vector
+#include "../Vector/Vector.h" // from and to inorder vector
 
-//Need get method to take the ownership from it.
-//#include "../Linked List/Singly LL.h"
-
+// Need get method to take the ownership from it.
+// #include "../Linked List/Singly LL.h"
 
 /// max degenerate nodes for auto rebalance
 #define MAX_DEGENERATE_NODES 5
@@ -22,17 +21,18 @@ class BinarySearchTree
 private:
     struct Node
     {
+        std::unique_ptr<T> _value;
         std::unique_ptr<Node> _left;
         std::unique_ptr<Node> _right;
-        std::unique_ptr<T> _value;
-        Node* _parent; //for simplicity
+        Node *_parent; // for simplicity
+        Node();
+        Node(const T &value);
+        Node(T &&value);
+        Node(const Node &node);
+        Node(Node &&node);
     };
     std::unique_ptr<Node> _root;
     int _level;
-    //int max_degenerate_nodes; changed to global micro
-
-    int _debug_number_of_search_iters;
-    int _debug_number_of_add_iters;
 
     /// @brief auto rebalance a branch without check number of degenerated nodes >= MAX_DEGENERATE_NODES
     /// @param node Any node in the degenerated branch
@@ -40,33 +40,54 @@ private:
     /// @note Time complexity : O(m) where m is MAX_DEGENERATE_NODES
     int auto_rebalance(Node &node);
 
+    /// @brief Temp sort method till the vector support the iterators and use a general sort algorithm
+    void sort_vector(Vector<std::unique_ptr<T>> &vector);
+
+    /// @brief Temp swap used in sort_vector
+    void swap_ptr(std::unique_ptr<T> &o1, std::unique_ptr<T> &o2)
+    {
+        std::unique_ptr<T> o3{std::move(o1)};
+        o1.reset(std::move(o2));
+        o2.reset(std::move(o3));
+    }
+
 public:
+    /*For debug*/
+    int _debug_number_of_search_iters{0};
+    int _debug_number_of_add_iters{0};
+    ////////////////////////////////////
+
     /// @brief Empty constructor
-    BinarySearchTree();
+    /// @param value root node's value
+    BinarySearchTree(const T &value = nullptr);
+
+    BinarySearchTree(T &&value);
 
     /// @brief Copy constructor
-    BinarySearchTree(const BinarySearchTree& search_tree);
+    BinarySearchTree(const BinarySearchTree &search_tree);
 
     /// @brief Move constructor
-    BinarySearchTree(BinarySearchTree&& search_tree);
+    BinarySearchTree(BinarySearchTree &&search_tree);
 
-    /// @brief Copy from pre-order vector
-    /// @param pre_order
-    BinarySearchTree(const Vector<T> &pre_order);
-    /// @brief Move from pre-order vector
-    BinarySearchTree(Vector<T> &&pre_order);
+    /// @brief Copy from vector
+    /// @param vector
+    /// @param is_sorted is the vector given is sorted
+    /// @param is_remove_duplicates is the vector given without duplicates
+    BinarySearchTree(const Vector<T> &vector, bool is_sorted = false, bool is_without_duplicates=false);
+    /// @brief Move from vector
+    BinarySearchTree(Vector<T> &&vector, bool is_sorted = false, bool is_without_duplicates=false);
 
     /// @brief Add a value to the tree with auto rebalance if the degenerated nodes > MAX_DEGENERATE_NODES
     /// @param value
     /// @note Time complexity : O(log(n)), n= number of tree elements
-    void add(const T& value);
-    void add(T&& value);
+    void add(const T &value);
+    void add(T &&value);
 
     /// @brief Search for a value in the tree
     /// @param search_value
     /// @return true if found
     /// @note Time complexity : O(log(n)), n= number of tree elements
-    [[nodiscard]] bool search(const T &search_value);
+    [[nodiscard]] bool search(const T &search_value) const;
 
     /// @todo
     /// @brief Search for a value in the tree
@@ -80,7 +101,7 @@ public:
     /// @param value
     /// @return True if removed else false
     /// @note Time complexity : O(log(n)), n= number of tree elements
-    bool remove(const T& value);
+    bool remove(const T &value);
 
     /// @todo
     /// @param path the path of the value where 0 is left, 1 is right
@@ -92,15 +113,17 @@ public:
     /// @note Time complexity : O(n)
     // int rebalance();
 
-    /// @brief Move the binary search tree to a pre-order vector, Warning: this will clear the tree
-    /// @return pre-order vector
+    /// @brief Move the binary search tree to a in-order vector, Warning: this will clear the tree
+    /// @return in-order vector
     /// @note Time complexity : O(n), n= number of tree elements
-    [[nodiscard]] Vector<T> move_to_preorder_vector(); // will clear the tree
+    [[nodiscard]] Vector<T> move_to_sorted_vector();
 
-    /// @brief Copy the binary search tree to a pre-order vector
-    /// @return pre-order vector
+    /// @brief Copy the binary search tree to a in-order vector
+    /// @return in-order vector
     /// @note Time complexity : O(n), n= number of tree elements
-    [[nodiscard]] Vector<T> copy_to_preorder_vector();
+    [[nodiscard]] Vector<T> copy_to_sorted_vector() const;
+
+    int get_level() const;
 
     //~BinarySearchTree(); //smart pointers
 };
