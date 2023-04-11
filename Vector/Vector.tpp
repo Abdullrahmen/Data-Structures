@@ -105,7 +105,7 @@ template<typename T> void Vector<T>::expand_capacity(uint expand_to)
     //T* temp_vec= new T[_capacity_size]; //Changed to smart pointers
     std::unique_ptr<T[]> temp_vec = std::make_unique<T[]>(_capacity_size);
     for (uint i = 0; i < _size; i++)
-        temp_vec[i]= _vec[i];
+        temp_vec[i]= std::move(_vec[i]);
 
     std::swap(temp_vec, _vec);
     

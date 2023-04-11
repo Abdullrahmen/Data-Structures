@@ -45,6 +45,11 @@ public:
     Vector(std::initializer_list<T> lst);
 
     /// @todo
+    /// @brief From heap array 
+    //Vector(std::unique_ptr<T[]>&& array);
+    //Vector(T[]* array_ptr);
+
+    /// @todo
     void right_rotate(int times);
     void left_rotate(int times);
     T& drop(uint idx);
