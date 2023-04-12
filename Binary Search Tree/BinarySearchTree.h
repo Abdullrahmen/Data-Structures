@@ -51,6 +51,13 @@ private:
         o2= std::move(o3);
     }
 
+    void init_from_balanced_vector(Vector<std::unique_ptr<Node>> &balanced_vec);
+
+    ///@brief just add node without auto-rebalance.
+    /// if the value is already in the tree then will throw invalid_argument
+    ///@note will move the ownership
+    void add_node(std::unique_ptr<Node> &node_to_add);
+
 public:
     /*For debug*/
     unsigned int _debug_number_of_search_iters{0};
@@ -77,7 +84,8 @@ public:
     /// @brief Move from vector
     BinarySearchTree(Vector<T> &&vector, bool is_sorted = false, bool is_without_duplicates=false);
 
-    /// @brief Add a value to the tree with auto rebalance if the degenerated nodes > MAX_DEGENERATE_NODES
+    /// @brief Add a value to the tree with auto rebalance if the degenerated nodes > MAX_DEGENERATE_NODES.  
+    /// if the value is already in the tree then will throw invalid_argument 
     /// @param value
     /// @note Time complexity : O(log(n)), n= number of tree elements
     void add(const T &value);
