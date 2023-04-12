@@ -7,7 +7,7 @@ with auto rebalance option
 
 #include <iostream>
 #include <memory>
-#include "../Vector/Vector.h" // from and to inorder vector
+#include "../Vector/Vector.h" // from and to inorder sorted vector
 
 // Need get method to take the ownership from it.
 // #include "../Linked List/Singly LL.h"
@@ -32,29 +32,29 @@ private:
         Node(Node &&node);
     };
     std::unique_ptr<Node> _root;
-    int _level;
+    unsigned int _level;
 
     /// @brief auto rebalance a branch without check number of degenerated nodes >= MAX_DEGENERATE_NODES
     /// @param node Any node in the degenerated branch
     /// @return new number of levels
     /// @note Time complexity : O(m) where m is MAX_DEGENERATE_NODES
-    int auto_rebalance(Node &node);
+    unsigned int auto_rebalance(Node &node);
 
     /// @brief Temp sort method till the vector support the iterators and use a general sort algorithm
-    void sort_vector(Vector<std::unique_ptr<T>> &vector);
+    void sort_vector(Vector<std::unique_ptr<Node>> &vector);
 
     /// @brief Temp swap used in sort_vector
-    void swap_ptr(std::unique_ptr<T> &o1, std::unique_ptr<T> &o2)
+    void swap_node(std::unique_ptr<Node> &o1, std::unique_ptr<Node> &o2)
     {
-        std::unique_ptr<T> o3{std::move(o1)};
-        o1.reset(std::move(o2));
-        o2.reset(std::move(o3));
+        std::unique_ptr<Node> o3{std::move(o1)};
+        o1= std::move(o2);
+        o2= std::move(o3);
     }
 
 public:
     /*For debug*/
-    int _debug_number_of_search_iters{0};
-    int _debug_number_of_add_iters{0};
+    unsigned int _debug_number_of_search_iters{0};
+    unsigned int _debug_number_of_add_iters{0};
     ////////////////////////////////////
 
     /// @brief Empty constructor
@@ -123,7 +123,9 @@ public:
     /// @note Time complexity : O(n), n= number of tree elements
     [[nodiscard]] Vector<T> copy_to_sorted_vector() const;
 
-    int get_level() const;
+    unsigned int get_level() const;
+
+    void debug_print() const;
 
     //~BinarySearchTree(); //smart pointers
 };
